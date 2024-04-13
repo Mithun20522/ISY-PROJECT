@@ -2,13 +2,13 @@ import { Link } from "react-router-dom";
 import img1 from "../../public/homeImg.png";
 const Login = () => {
   return (
-    <div className="flex sm:justify-between justify-center items-center min-h-screen bg-slate-300">
+    <div className="flex sm:justify-between justify-center w-full min-h-screen bg-slate-300">
       <img
         src={img1}
         alt="image"
         className="hidden sm:block w-[50vw] h-[100vh]"
       />
-      <form className="flex flex-col gap-3 sm:absolute sm:right-28 sm:top-52">
+      <form className="flex flex-col gap-3 mt-24 sm:mr-28">
         <h1 className="text-center mb-5 text-3xl font-semibold">
           Login to your account
         </h1>
