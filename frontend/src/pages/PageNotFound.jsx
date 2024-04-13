@@ -1,8 +1,11 @@
 import React from 'react'
+import ChatCard from '../components/ChatCard'
 
 const PageNotFound = () => {
   return (
-    <div>PageNotFound</div>
+    <div>
+      page not found
+    </div>
   )
 }
 

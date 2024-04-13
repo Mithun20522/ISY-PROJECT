@@ -7,6 +7,7 @@ import PageNotFound from './pages/PageNotFound';
 import Resources from './pages/Resources';
 import WellBeing from './pages/WellBeing';
 import Header from './components/Header';
+import Footer from './components/Footer';
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
       <Route path='/well-being' element={<WellBeing/>} />
       <Route path='*' element={<PageNotFound/>} />
     </Routes>
+    {/* <Footer/> */}
     </>
   )
 }
