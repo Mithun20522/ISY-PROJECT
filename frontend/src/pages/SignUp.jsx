@@ -62,6 +62,7 @@ const SignUp = () => {
           className="bg-white outline-none px-32 py-3 rounded-md shadow-md"
           type="text"
           id="username"
+          required
           onChange={(e) => handleChange(e)}
           placeholder="Enter username"
         />
@@ -69,6 +70,7 @@ const SignUp = () => {
           className="bg-white outline-none px-32 py-3 rounded-md shadow-md"
           type="email"
           id="email"
+          required
           onChange={(e) => handleChange(e)}
           placeholder="Enter email"
         />
@@ -76,6 +78,7 @@ const SignUp = () => {
           className="bg-white outline-none px-32 py-3 rounded-md shadow-md"
           type="password"
           id="password"
+          required
           onChange={(e) => handleChange(e)}
           placeholder="Enter password"
         />

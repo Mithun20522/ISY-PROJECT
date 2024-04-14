@@ -1,8 +1,12 @@
 import { Link } from 'react-router-dom';
 import {AiOutlineMenu, AiOutlineClose} from 'react-icons/ai'
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 const Header = () => {
   const [clicked, setClicked] = useState(false);
+  const dispatch = useDispatch();
+  const {currentUser} = useSelector((state) => state.user);
+  console.log(currentUser);
   return (
     <nav className='p-7 flex items-center justify-between bg-slate-300 shadow-md border-b-2 border-black'>
         <h1 className='cursor-pointer'>CollegeBuddy</h1>
