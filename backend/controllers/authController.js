@@ -24,7 +24,7 @@ export const signup = async(req, res) => {
         return res.status(201).json({message:'User created successfully'});
 
     } catch (error) {
-        return res.status(500).json({error:error});
+        return res.status(500).json({message:error});
     }
 }
 
@@ -46,7 +46,7 @@ export const signin = async(req, res) => {
         return res.status(200).cookie('access_token', access_token, {httpOnly:true}).json({message:'Login successfull'});
 
     } catch (error) {
-        return res.status(500).json({error:error});
+        return res.status(500).json({message:error});
     }
 }
 
@@ -54,6 +54,6 @@ export const signout = (req, res) => {
     try {
         res.status(200).clearCookie('access_token').json({message:'logout successfull'});
     } catch (error) {
-        return res.status(500).json({error:error});
+        return res.status(500).json({message:error});
     }
 }

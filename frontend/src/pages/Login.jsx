@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import img1 from "../../public/homeImg.png";
+import { useState } from "react";
 const Login = () => {
+
+
   return (
     <div className="flex sm:justify-between justify-center w-full min-h-screen bg-slate-300">
       <img
