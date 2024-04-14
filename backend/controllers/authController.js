@@ -43,7 +43,7 @@ export const signin = async(req, res) => {
             return res.status(400).json({message:'Wrong credentials'})
         }
         const access_token = jwt.sign({_id:user._id, isAdmin:user.isAdmin}, process.env.SECRET_TOKEN_KEY,{expiresIn:'2h'});
-        const { password:pass, ...rest } = user._doc;
+        const { password:pass,...rest } = user._doc;
 
         return res.status(200).cookie('access_token', access_token, {httpOnly:true}).json({rest, message:'login successfull'});
 
