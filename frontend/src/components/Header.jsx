@@ -3,7 +3,6 @@ import {AiOutlineMenu, AiOutlineClose} from 'react-icons/ai'
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
-import {Popup} from 'reactjs-popup';
 import { logoutSuccess } from '../redux/user/userSlice';
 const Header = () => {
   const [clicked, setClicked] = useState(false);
@@ -17,6 +16,7 @@ const Header = () => {
       });
       const data = await res.json();
       if(res.ok){
+        setUserLogout(false);
         dispatch(logoutSuccess());
         toast.success(data.message);
         return;
@@ -56,7 +56,7 @@ const Header = () => {
                             </div>
                           ): ""
                          }
-                         <p className='text-lg font-bold items-center '>{currentUser.rest.username}</p>
+                         <p className='text-sm font-bold items-center absolute top-2 right-24'>{currentUser.rest.username}</p>
                       </div>
                   ): (
                     <Link to={'/login'} className='px-3 py-1 rounded-md bg-slate-700 hover:bg-slate-900 text-white'>Login</Link>
