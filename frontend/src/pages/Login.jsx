@@ -11,7 +11,7 @@ const Login = () => {
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {loading} = useSelector((state) => state.user);
+  // const {loading} = useSelector((state) => state.user);
 
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -49,7 +49,7 @@ const handleChange = (e) => {
       [e.target.id]:e.target.value
     });
 }
-
+  // console.log(loading);
   return (
     <div className="flex sm:justify-between justify-center w-full min-h-screen bg-slate-300">
       <img
@@ -79,10 +79,11 @@ const handleChange = (e) => {
         />
         <button
           type="submit"
-          disabled={loading}
+          // disabled={loading}
           className="bg-purple-600 p-3 rounded-md text-sm font-semibold text-white hover:bg-purple-700 transition-all duration-200 ease-in-out"
         >
-           {loading ? 'Loading...' : 'Log in'}
+           {/* {loading ? 'Loading...' : 'Log in'} */}
+           Log in
         </button>
         <div className="flex gap-2 mr-10">
           <p className="text-sm font-semibold">Don{"'"}t have an account ?</p>

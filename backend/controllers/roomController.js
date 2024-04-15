@@ -17,7 +17,7 @@ export const createRoom = async(req, res) => {
         });
 
         await newRoom.save();
-        return res.status(201).json({message:'room created succcessfully.'});
+        return res.status(201).json({message:'room created succcessfully.', newRoom});
 
     } catch (error) {
         return res.status(500).json({message:error.message});

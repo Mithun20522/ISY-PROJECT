@@ -1,39 +1,73 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ChatCard from "../components/ChatCard";
 import Peer from "../components/Peer";
 import { useDispatch, useSelector } from 'react-redux';
 import { AiOutlineClose } from 'react-icons/ai';
-import { createRoom } from "../redux/chat/roomSlice";
 import { toast } from 'react-hot-toast';
+import { createRoomFailure, createRoomStart, createRoomSuccess } from "../redux/room/roomSlice";
 
 const PeerConnect = () => {
   const {currentUser} = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-  const [roomInfoData, setRoomInfoData] = useState({});
-
-  const {roomInfo} = useSelector((state) => state.room)
+  const [rooms, setRooms] = useState([]);
+  const [formData, setFormData] = useState({});
   const [clicked, setClicked] = useState(false);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const getRooms = async() => {
+      try {
+        const res = await fetch('http://localhost:3000/api/room/get-rooms', {method:'GET'});
+        const data = await res.json();
+        if(res.ok){
+          setRooms(data);
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+    getRooms();
+  },[rooms])
 
-  const handleSubmit = (e) => {
-      e.preventDefault();
-      setClicked(!clicked);
-      dispatch(createRoom([roomInfoData]));
-      toast.success(`"${roomInfoData.roomTitle}" room created.`);
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    try {
+      dispatch(createRoomStart());
+      const res = await fetch('http://localhost:3000/api/room/create-room',{
+        method:'POST',
+        headers:{
+          'Content-type':'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+      const data = await res.json();
+      if(res.ok){
+        toast.success(data.message);
+        dispatch(createRoomSuccess(data));
+        setClicked(!clicked);
+        return;
+      }
+      else{
+        dispatch(createRoomFailure(data.message))
+        toast.error(data.message);
+        return;
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 
-  const handleChange = (e) => {
-    setRoomInfoData({
-      ...roomInfoData,
+  const handleOnchange = (e) => {
+    setFormData({
+      ...formData,
       [e.target.id]:e.target.value
     })
   }
 
   return (
-    <div className="flex flex-col justify-center w-full h-screen items-center">
-      <div className="flex flex-col">
+    <div className="flex flex-col justify-between w-full min-h-screen items-center">
+      <div className="flex flex-col mt-10">
         {
           currentUser?.rest.isAdmin && (
-            <button onClick={() => setClicked(!clicked)} className="px-3 py-1 bg-purple-700 hover:bg-purple-900 mx-[40%] mb-5 rounded-md text-white">create room</button>
+            <button onClick={() => setClicked(!clicked)} className="px-3 py-1 bg-purple-700 hover:bg-purple-900 max-w-lg mx-auto mb-5 rounded-md text-white">create room</button>
           )
         }
 
@@ -41,18 +75,19 @@ const PeerConnect = () => {
           clicked && (
             <form className="flex gap-2 flex-col absolute bg-slate-400 p-14 top-[30%] left-[40%] rounded-xl shadow-md transition duration-200 ease-in" onSubmit={handleSubmit}>
               <AiOutlineClose onClick={() => setClicked(!clicked)} className="absolute top-3 right-7 text-2xl cursor-pointer text-white hover:bg-white hover:text-black rounded-full"/>
-              <input required id="roomTitle" onChange={(e) => handleChange(e)} type="text" placeholder="Enter room title" className="p-3 outline-none bg-slate-200 rounded-md shadow-md " />
+              <input onChange={(e) => handleOnchange(e)} required id="roomTitle" type="text" placeholder="Enter room title" className="p-3 outline-none bg-slate-200 rounded-md shadow-md " />
               <button type="submit" className="px-3 py-1 bg-teal-500 hover:bg-teal-800 text-white rounded-md">Add</button>
             </form>
           )
         }
 
         <h1 className="text-center text-3xl font-bold">Available meeting rooms</h1>
-        <div className="flex flex-wrap">
-          <ChatCard />
-          <ChatCard />
-          <ChatCard />
-          <ChatCard />
+        <div className="flex flex-wrap mx-12">
+        {
+          rooms.map((room) => (
+              <ChatCard key={room._id} room={room} />
+          ))
+        }
         </div>
       </div>
       <div>
