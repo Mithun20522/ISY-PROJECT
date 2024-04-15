@@ -8,6 +8,7 @@ const Header = () => {
   const [clicked, setClicked] = useState(false);
   const [userLogout, setUserLogout] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {currentUser} = useSelector((state) => state.user);
   const handleSubmit = async() => {
     try {
@@ -19,6 +20,7 @@ const Header = () => {
         setUserLogout(false);
         dispatch(logoutSuccess());
         toast.success(data.message);
+        navigate('/');
         return;
       }
       else{

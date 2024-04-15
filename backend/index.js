@@ -7,6 +7,7 @@ import authRouter from './routes/authRouter.js';
 import chatRouter from './routes/chatRouter.js';
 import {Server} from 'socket.io'
 import http from 'http'
+import roomRouter from './routes/roomRouter.js';
 dotenv.config();
 
 const app = express();
@@ -29,6 +30,7 @@ mongoose.connect(process.env.MONGO_DB_URL)
 
 app.use('/api/auth', authRouter);
 app.use('/api/chat', chatRouter);
+app.use('/api/room', roomRouter);
 
 io.on('connection', (socket) => {
     console.log('user connected');
