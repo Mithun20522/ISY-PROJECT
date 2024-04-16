@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { MdDelete } from "react-icons/md";
 import toast from "react-hot-toast";
 import { deleteRoomFailure, deleteRoomStart, deleteRoomSuccess } from "../redux/room/roomSlice";
+import { Link } from 'react-router-dom';
 
 const ChatCard = ({room}) => {
   const {currentUser} = useSelector((state) => state.user);
@@ -32,7 +33,7 @@ const ChatCard = ({room}) => {
         <h2 className='text-xl'>{room.roomTitle}</h2>
         <p className='text-xs'>available users: 3</p>
         <div className="flex items-center justify-evenly">
-        <button className='bg-green-600 px-4 rounded-full text-sm py-1 text-white hover:bg-green-800'>Join</button>
+        <Link to={'/chatroom'} className='bg-green-600 px-4 rounded-full text-sm py-1 text-white hover:bg-green-800'>Join</Link>
           {
             currentUser?.rest.isAdmin ? (
               <MdDelete onClick={handleDelete} className="text-xl cursor-pointer hover:scale-100 transition-shadow duration-100"/>
