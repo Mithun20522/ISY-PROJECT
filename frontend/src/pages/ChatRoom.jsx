@@ -3,27 +3,39 @@ import { IoMdSend } from "react-icons/io";
 import { useSelector } from 'react-redux';
 import {AiOutlineClose} from 'react-icons/ai'
 import toast from "react-hot-toast";
+import { RiAdminFill } from "react-icons/ri";
 const ChatRoom = () => {
   const {currentRoom} = useSelector((state) => state.room);
   const {currentUser} = useSelector((state) => state.user);
-  const [roomInfo, setRoomInfo] = useState([]);
+  const [membersInfo, setMembersInfo] = useState([]);
   const [click, setClick] = useState(false);
+  const {member} = useSelector((state) => state.member);
+  
   useEffect(() => {
-    const getRoomInfo = async() => {
-      const res = await fetch(`http://localhost:3000/api/room/get-room/${currentRoom._id}`);
-      const data = await res.json();
-      setRoomInfo(data.members);
+    const getMembersInfoFromRoom = async() => {
+      try {
+        const res = await fetch(`http://localhost:3000/api/room/get-room/${currentRoom._id}`);
+        const data = await res.json();
+        if(res.ok){
+          setMembersInfo(data.members);
+        }
+        else{
+          console.log(data.message);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
-    getRoomInfo();
-  },[roomInfo]);
+    getMembersInfoFromRoom();
+  },[membersInfo]);
 
   return (
     <section className='flex max-w-5xl mx-auto mt-10 border'>
       <div className='bg-slate-100 w-[20vw] border'>
-      <h1 className="text-center p-4 border-b border-black ">All Members: {roomInfo.length > 0 ? roomInfo.length : 0}</h1>
+      <h1 className="text-center p-4 border-b border-black ">All Members: {membersInfo && membersInfo.length > 0 ? membersInfo.length : 0}</h1>
           {
-            roomInfo && roomInfo.map((room , idx) => (
-              <div key={idx} onClick={() => setClick(!click)} className={`flex gap-1 items-center px-5 py-2 mt-2 mx-2 rounded-xl ${currentUser?.rest.isAdmin ? 'cursor-pointer hover:shadow-md hover:bg-slate-300 transition-shadow' : ''}`}>
+            membersInfo && membersInfo.map((room) => (
+              <div key={room.userId} onClick={() => setClick(!click)} className={`flex gap-1 items-center px-5 py-2 mt-2 mx-2 rounded-xl ${currentUser?.rest.isAdmin ? 'cursor-pointer hover:shadow-md hover:bg-slate-300 transition-shadow' : ''}`}>
                   <img src={room.avatar} alt={room.username} className="w-6 h-6" />
                   <p className="text-sm">{room.username}</p>
               </div>
@@ -42,12 +54,12 @@ const ChatRoom = () => {
             }
           </div>
         <div className="w-full">
-            <h1 className="text-center text-4xl font-medium text-black border bg-slate-100 p-2">{roomInfo.roomTitle}</h1>
+            <h1 className="text-center text-4xl font-medium text-black border bg-slate-100 p-2">{membersInfo.roomTitle}</h1>
             <div>
                 <div className="h-[55vh] rounded-lg bg-slate-50 overflow-scroll space-y-1 relative px-3">
                 <div className="max-w-fit p-2">
                     {/* {
-                      roomInfo && roomInfo.map((room) => (
+                      membersInfo && membersInfo.map((room) => (
                         <div key={room.userId} className="w-fit flex gap-1 items-center font-medium p-1 ">
                         <img src={room.avatar} alt="member" className="w-6 h-6" />
                         <p className="text-[0.6rem]">{room.username}</p>
