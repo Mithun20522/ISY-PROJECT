@@ -93,19 +93,19 @@ const ChatRoom = () => {
             <h1 className="text-center text-lg font-medium text-black border bg-slate-100 p-2">{member.title}</h1>
             <div>
                 <div className="h-[55vh] rounded-lg bg-slate-50 overflow-scroll space-y-1 relative px-3">
-                <div className="max-w-fit p-2">
-                    {/* {
-                      membersInfo && membersInfo.map((room) => (
-                        <div key={room.userId} className="w-fit flex gap-1 items-center font-medium p-1 ">
+                {
+                  membersInfo && membersInfo.map((room) => (
+                    <div key={room.userId} className="max-w-fit p-2">
+                    <div className="w-fit flex gap-1 items-center font-medium p-1 ">
                         <img src={room.avatar} alt="member" className="w-6 h-6" />
                         <p className="text-[0.6rem]">{room.username}</p>
-                      </div>
-                      ))
-                    } */}
+                    </div>
                     <p className="bg-slate-200 shadow-sm p-3 overflow-hidden rounded-lg max-w-lg">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. A velit nobis assumenda. Iure, nesciunt incidunt!
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, repellat nam tempore maxime sed exercitationem aperiam praesentium commodi!
                     </p>
-                </div>
+                  </div>
+                  ))
+                }
                 </div>
                 <div className="flex items-center relative">
                     <input id="message" type="text" placeholder='Type message.....' className="bg-slate-200 outline-none rounded-md p-3 w-full" />
