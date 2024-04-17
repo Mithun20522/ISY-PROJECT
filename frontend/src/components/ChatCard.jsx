@@ -58,12 +58,14 @@ const ChatCard = ({room}) => {
           const member = await res2.json();
           if(res2.ok){
             dispatch(joinRoomSuccess(room));
-            dispatch(addMemberSuccess({member, id:room._id, roomTitle:room.roomTitle}));
+            dispatch(addMemberSuccess({member, id:member.room._id, roomTitle:room.roomTitle}));
             toast.success('Room joined successfully');
             navigate('/chatroom');
           }
           else{
             toast.error(member.message);
+            dispatch(joinRoomFailure(member.message));
+            dispatch(addMemberFailure(member.message));
             console.log(member.message);
             return;
           }
@@ -85,7 +87,7 @@ const ChatCard = ({room}) => {
         <p className='text-xs'>Members: {room.members.length}</p>
         <div className="flex items-center justify-evenly">
         {isMember ? (
-          <Link to="/chatroom" onClick={() => dispatch(addMemberSuccess({members:room.members, roomId:room._id}))} className='bg-blue-600 px-4 rounded-full text-sm py-1 text-white hover:bg-blue-800'>View</Link>
+          <Link to="/chatroom" onClick={() => dispatch(addMemberSuccess({members:room.members, id:room._id}))} className='bg-blue-600 px-4 rounded-full text-sm py-1 text-white hover:bg-blue-800'>View</Link>
         ) : (
           <button onClick={handleJoinRoom} className='bg-green-600 px-4 rounded-full text-sm py-1 text-white hover:bg-green-800'>Join</button>
         )}

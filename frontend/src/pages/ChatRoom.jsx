@@ -10,11 +10,10 @@ const ChatRoom = () => {
   const [membersInfo, setMembersInfo] = useState([]);
   const [click, setClick] = useState(false);
   const {member} = useSelector((state) => state.member);
-  
   useEffect(() => {
     const getMembersInfoFromRoom = async() => {
       try {
-        const res = await fetch(`http://localhost:3000/api/room/get-room/${currentRoom._id}`);
+        const res = await fetch(`http://localhost:3000/api/room/get-room/${member.id}`);
         const data = await res.json();
         if(res.ok){
           setMembersInfo(data.members);
