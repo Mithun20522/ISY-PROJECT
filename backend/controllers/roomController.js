@@ -36,6 +36,19 @@ export const getAllRooms = async(req, res) => {
     }
 }
 
+export const getRoom = async(req, res) => {
+    try {
+        const {id} = req.params;
+        const room = await Room.findById({_id:id});
+        if(!room){
+            return res.status(404).json({message:'No room found!'});
+        }
+        return res.status(200).json(room);
+    } catch (error) {
+        return res.status(500).json({message:error.message});
+    }
+}
+
 export const deleteRoom = async(req, res) => {
     try {
         const {id} = req.params;
@@ -48,3 +61,18 @@ export const deleteRoom = async(req, res) => {
         return res.status(500).json({message:error.message});
     }
 }
+
+export const updateRoom = async(req, res) => {
+    try {
+        const {id} = req.params;
+        const updatedDetail = req.body;
+        const room = await Room.findByIdAndUpdate(id,updatedDetail,{new:true});
+        if(!room){
+            return res.status(404).json({message:'No room found'});
+        }
+        return res.status(200).json({message:'member added',room});
+    } catch (error) {
+        return res.status(500).json({message:error.message});
+    }
+}
+

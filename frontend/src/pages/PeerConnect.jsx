@@ -19,6 +19,7 @@ const PeerConnect = () => {
         const data = await res.json();
         if(res.ok){
           setRooms(data);
+          return;
         }
       } catch (error) {
         console.log(error.message);
@@ -54,7 +55,6 @@ const PeerConnect = () => {
       console.log(error.message);
     }
   }
-
   const handleOnchange = (e) => {
     setFormData({
       ...formData,
@@ -84,9 +84,11 @@ const PeerConnect = () => {
         <h1 className="text-center text-3xl font-bold">Available meeting rooms</h1>
         <div className="flex flex-wrap mx-12">
         {
-          rooms.map((room) => (
+          rooms.length > 0 ? rooms.map((room) => (
               <ChatCard key={room._id} room={room} />
-          ))
+          )) : (
+            <h1 className="max-w-lg mx-auto mt-20 text-3xl text-medium text-red-600">No rooms yet</h1>
+          )
         }
         </div>
       </div>

@@ -34,9 +34,32 @@ const roomSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
+        joinRoomStart: (state, action) => {
+            state.loading = true;
+            state.error = null;
+        },
+        joinRoomSuccess: (state, action) => {
+            state.loading = false;
+            state.currentRoom = action.payload;
+            state.error = null;
+        },
+        joinRoomFailure: (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        }
     }
 });
 
-export const {createRoomStart, createRoomSuccess, createRoomFailure, deleteRoomStart, deleteRoomSuccess, deleteRoomFailure} = roomSlice.actions;
+export const 
+{   createRoomStart,
+    createRoomSuccess, 
+    createRoomFailure, 
+    deleteRoomStart,
+    deleteRoomSuccess, 
+    deleteRoomFailure,
+    joinRoomStart,
+    joinRoomSuccess,
+    joinRoomFailure,
+} = roomSlice.actions;
 
 export default roomSlice.reducer;

@@ -2,7 +2,7 @@ import React from 'react'
 import { io } from 'socket.io-client';
 
 const Box = () => {
-  // const socket = io('http://localhost:3000', {transports:false});
+  
   return (
     <div className='border p-7 bg-slate-50 shadow-md sm:mx-24 mx-20 mt-5 rounded-2xl'>
         <h1 className='text-center mb-2 font-bold text-xl text-teal-500'>College buddy</h1>
