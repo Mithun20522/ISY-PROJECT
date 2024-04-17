@@ -11,7 +11,7 @@ const ChatCard = ({room}) => {
   const {member} = useSelector((state) => state.member);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const [joined, setJoined] = useState(false);
   const isMember = currentUser && currentUser.rest && room.members.some(member => member.userId === currentUser.rest._id);
 
   const handleDelete = async() => {
@@ -38,6 +38,7 @@ const ChatCard = ({room}) => {
 
   const handleJoinRoom = async() => {
     try {
+
         if(currentUser && currentUser.rest && room){
           dispatch(joinRoomStart());
           dispatch(joinRoomSuccess(room));
@@ -81,18 +82,28 @@ const ChatCard = ({room}) => {
       console.log(error);
     }
   }
+
   return (
     <div className='bg-slate-50 p-4 mt-5 w-[200px] h-[200px] space-y-2 rounded-3xl border text-center content-center ml-10'>
         <h2 className='text-xl'>{room.roomTitle}</h2>
         <p className='text-xs'>Members: {room.members.length}</p>
         <div className="flex items-center justify-evenly">
         {isMember ? (
-          <Link to="/chatroom" onClick={() => dispatch(addMemberSuccess({members:room.members, id:room._id}))} className='bg-blue-600 px-4 rounded-full text-sm py-1 text-white hover:bg-blue-800'>View</Link>
+          <Link to="/chatroom" onClick={() => dispatch(addMemberSuccess({members:room.members, id:room._id,title:room.roomTitle}))} className='bg-blue-600 px-4 rounded-full text-sm py-1 text-white hover:bg-blue-800'>View</Link>
         ) : (
           <button onClick={handleJoinRoom} className='bg-green-600 px-4 rounded-full text-sm py-1 text-white hover:bg-green-800'>Join</button>
         )}
-
-        {/* <button onClick={handleJoinRoom} className='bg-green-600 px-4 rounded-full text-sm py-1 text-white hover:bg-green-800'> Join</button> */}
+        {/* {
+          joined && (
+            <form className="bg-slate-400 p-3 absolute top-20 right-[40vw] rounded-lg">
+              <h1 className=" text-sm font-semibold">would you like to go anonymous?</h1>
+              <div className="flex justify-between px-5 mt-5">
+                <button onClick={() => setJoined(!joined)} className="bg-slate-500 text-sm text-white hover:bg-slate-700 px-3 py-1 rounded-md">No</button>
+                <button type="submit" className="bg-red-500 text-white hover:bg-red-700 text-sm px-3 py-1 rounded-md">Yes</button>
+              </div>
+            </form>
+          )
+        } */}
           {
             currentUser?.rest.isAdmin ? (
               <MdDelete onClick={handleDelete} className="text-xl cursor-pointer hover:scale-100 transition-shadow duration-100"/>

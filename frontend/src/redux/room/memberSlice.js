@@ -19,7 +19,20 @@ const memberSlice = createSlice({
         addMemberFailure: (state, action) => {
             state.loading = false;
             state.error = action.payload;
-        }
+        },
+        removeMemberStart: (state, action) => {
+            state.loading = true;
+            state.error = null
+        },
+        removeMemberSuccess: (state, action) => {
+            state.member = null;
+            state.loading = false;
+        },
+        removeMemberFailure: (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        },
+
     }
 })
 

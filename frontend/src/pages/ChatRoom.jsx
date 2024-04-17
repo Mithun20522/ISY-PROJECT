@@ -9,6 +9,7 @@ const ChatRoom = () => {
   const {currentUser} = useSelector((state) => state.user);
   const [membersInfo, setMembersInfo] = useState([]);
   const [click, setClick] = useState(false);
+  const [memberToBeRemoved, setMemberToBeRemoved] = useState({});
   const {member} = useSelector((state) => state.member);
   useEffect(() => {
     const getMembersInfoFromRoom = async() => {
@@ -28,13 +29,49 @@ const ChatRoom = () => {
     getMembersInfoFromRoom();
   },[membersInfo]);
 
+  const handleMemberDelete = async() => {
+    try {
+      if(!memberToBeRemoved) {
+        toast.error('please select a user first!');
+        return;
+      }
+      const currentMembersRes = await fetch(`http://localhost:3000/api/room/get-room/${memberToBeRemoved.roomId}`);
+      const currentMembersData = await currentMembersRes.json();
+      const currentMembers = currentMembersData.members;
+      const membersAfterDeletion = currentMembers.filter((curr) => curr.username !== memberToBeRemoved.memberName);
+      const res = await fetch(`http://localhost:3000/api/room/update-room/${memberToBeRemoved.roomId}`,{
+        method:'PATCH',
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body: JSON.stringify({members:membersAfterDeletion})
+      })
+      const data = await res.json();
+      if(res.ok){
+        toast.success('member removed from the room');
+        setClick(!click);
+        return;
+      }
+      else{
+        toast.error(data.message);
+        console.log(data.message);
+        return;
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <section className='flex max-w-5xl mx-auto mt-10 border'>
       <div className='bg-slate-100 w-[20vw] border'>
       <h1 className="text-center p-4 border-b border-black ">All Members: {membersInfo && membersInfo.length > 0 ? membersInfo.length : 0}</h1>
           {
             membersInfo && membersInfo.map((room) => (
-              <div key={room.userId} onClick={() => setClick(!click)} className={`flex gap-1 items-center px-5 py-2 mt-2 mx-2 rounded-xl ${currentUser?.rest.isAdmin ? 'cursor-pointer hover:shadow-md hover:bg-slate-300 transition-shadow' : ''}`}>
+              <div key={room.userId} onClick={() => {
+                setMemberToBeRemoved({memberName:room.username,memberId:room.userId,roomId:member.id});
+                setClick(!click);
+                }} 
+                className={`flex gap-1 items-center px-5 py-2 mt-2 mx-2 rounded-xl ${currentUser?.rest.isAdmin ? 'cursor-pointer hover:shadow-md hover:bg-slate-300 transition-shadow' : ''}`}>
                   <img src={room.avatar} alt={room.username} className="w-6 h-6" />
                   <p className="text-sm">{room.username}</p>
               </div>
@@ -43,17 +80,17 @@ const ChatRoom = () => {
             {
               click && (
                 <div className="bg-slate-400 absolute p-3 top-20 rounded-lg space-y-2 left-[40%]">
-                  <p className="text-sm font-bold text-white max-w-xs">Sure you want to remove {currentUser.rest.username} ?</p>
+                  <p className="text-sm font-bold text-white max-w-xs">Sure you want to remove <span className="font-bold">{`"${memberToBeRemoved.memberName}"`}</span> ?</p>
                   <div className="flex justify-between mx-2">
                     <button onClick={() => setClick(!click)} className='px-3 py-1 rounded-md font-semibold text-white bg-slate-700 hover:bg-slate-900'>No</button>
-                    <button className="px-3 py-1 rounded-md font-semibold text-white bg-red-500 hover:bg-red-700">Yes</button>
+                    <button onClick={handleMemberDelete} className="px-3 py-1 rounded-md font-semibold text-white bg-red-500 hover:bg-red-700">Yes</button>
                   </div>
                 </div>
               )
             }
           </div>
         <div className="w-full">
-            <h1 className="text-center text-4xl font-medium text-black border bg-slate-100 p-2">{membersInfo.roomTitle}</h1>
+            <h1 className="text-center text-lg font-medium text-black border bg-slate-100 p-2">{member.title}</h1>
             <div>
                 <div className="h-[55vh] rounded-lg bg-slate-50 overflow-scroll space-y-1 relative px-3">
                 <div className="max-w-fit p-2">
