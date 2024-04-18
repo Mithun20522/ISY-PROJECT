@@ -63,7 +63,15 @@ const PeerConnect = () => {
   }
 
   return (
-    <div className="flex flex-col justify-between w-full min-h-screen items-center">
+    <section className="flex flex-col justify-between w-full items-center">
+      <div className="bg-slate-100 p-7 mx-[10vw] space-y-5 mt-10 rounded-2xl shadow-lg">
+        <h1 className="text-center text-2xl font-bold font-sans">
+          Welcome to Peer Connect
+        </h1>
+        <p className="">
+        Peer Connect is a feature of MindLink Community that allows you to connect with others in a safe and supportive environment. Join one of our chat rooms to share your experiences, thoughts, and feelings with peers who understand what you're going through. You can choose to chat using your identity or anonymously, depending on your comfort level.
+        </p>
+      </div>
       <div className="flex flex-col mt-10">
         {
           currentUser?.rest.isAdmin && (
@@ -92,7 +100,7 @@ const PeerConnect = () => {
         }
         </div>
       </div>
-      <div>
+      {/* <div>
         <h1 className="text-center mt-5 text-3xl font-bold">Your Peers</h1>
         <div className="flex flex-wrap">
         <Peer/>
@@ -100,8 +108,8 @@ const PeerConnect = () => {
         <Peer/>
         <Peer/>
         </div>
-      </div>
-    </div>
+      </div> */}
+    </section>
 
   );
 };

@@ -93,20 +93,72 @@ const ChatRoom = () => {
             <h1 className="text-center text-lg font-medium text-black border bg-slate-100 p-2">{member.title}</h1>
             <div>
                 <div className="h-[55vh] rounded-lg bg-slate-50 overflow-scroll space-y-1 relative px-3">
-                {
+                  <div className="flex flex-col">
+                  <div className="max-w-fit p-2 incoming_message mr-auto">
+                    <div className="w-fit flex gap-1 items-center font-medium p-1 ">
+                        <img src={member.members[0].avatar} alt="member" className="w-6 h-6" />
+                        <p className="text-[0.6rem]">akash kumar</p>
+                    </div>
+                    <p className={`bg-slate-200 shadow-sm p-3 overflow-hidden rounded-lg max-w-lg`}>
+                    Hey everyone, how are you all coping with the stress of upcoming exams?
+                    </p>
+                  </div>
+                  <div className="max-w-fit p-2 incoming_message mr-auto">
+                    <div className="w-fit flex gap-1 items-center font-medium p-1 ">
+                        <img src={member.members[0].avatar} alt="member" className="w-6 h-6" />
+                        <p className="text-[0.6rem]">rohan gupta</p>
+                    </div>
+                    <p className={`bg-slate-200 shadow-sm p-3 overflow-hidden rounded-lg max-w-lg`}>
+                    Hey akash, I'm honestly feeling pretty overwhelmed. There's just so much to study, and I feel like I'm running out of time
+
+                    </p>
+                  </div>
+                  <div className="max-w-fit p-2 incoming_message mr-auto">
+                    <div className="w-fit flex gap-1 items-center font-medium p-1 ">
+                        <img src={member.members[0].avatar} alt="member" className="w-6 h-6" />
+                        <p className="text-[0.6rem]">mithunverma01</p>
+                    </div>
+                    <p className={`bg-green-200 shadow-sm p-3 overflow-hidden rounded-lg max-w-lg`}>
+                    Yeah, I've been feeling the pressure too. I find that taking short breaks and doing some exercise really helps me clear my mind
+                    </p>
+                  </div>
+                  <div className="max-w-fit p-2 incoming_message ml-auto">
+                    <div className="w-fit flex gap-1 items-center font-medium p-1 ">
+                        <img src={member.members[0].avatar} alt="member" className="w-6 h-6" />
+                        <p className="text-[0.6rem]">anonymous253</p>
+                    </div>
+                    <p className={`bg-slate-200 shadow-sm p-3 overflow-hidden rounded-lg max-w-lg`}>
+                    That sounds helpful. I might give that a try. It's comforting to know that we're all in this together and can support each other through it.
+                    </p>
+                  </div>
+                  <div className="max-w-fit p-2 outgoing_message mr-auto">
+                    <div className="w-fit flex gap-1 items-center font-medium p-1 ml-auto">
+                        <img src={member.members[0].avatar} alt="member" className="w-6 h-6" />
+                        <p className="text-[0.6rem]">amit malik</p>
+                    </div>
+                    <p className={`bg-slate-200 shadow-sm p-3 overflow-hidden rounded-lg max-w-lg`}>
+                    That's a good idea, rohan. I've also been trying to practice mindfulness and meditation to help manage my stress
+
+                    </p>
+                  </div>
+                  </div>
+                
+                  
+                {/* {
                   membersInfo && membersInfo.map((room) => (
                     <div key={room.userId} className="max-w-fit p-2">
                     <div className="w-fit flex gap-1 items-center font-medium p-1 ">
                         <img src={room.avatar} alt="member" className="w-6 h-6" />
                         <p className="text-[0.6rem]">{room.username}</p>
                     </div>
-                    <p className="bg-slate-200 shadow-sm p-3 overflow-hidden rounded-lg max-w-lg">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, repellat nam tempore maxime sed exercitationem aperiam praesentium commodi!
+                    <p className={`${currentUser.rest.isAdmin && currentUser.rest._id === room.userId ? 'bg-green-200' : 'bg-slate-200'} shadow-sm p-3 overflow-hidden rounded-lg max-w-lg`}>
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit facilis hic aperiam ullam unde magnam, labore repellendus!
                     </p>
                   </div>
                   ))
-                }
+                } */}
                 </div>
+
                 <div className="flex items-center relative">
                     <input id="message" type="text" placeholder='Type message.....' className="bg-slate-200 outline-none rounded-md p-3 w-full" />
                     <IoMdSend className="text-3xl absolute right-5 hover:bg-slate-500 hover:p-2 rounded-full cursor-pointer hover:text-white transition duration-200 ease-in-out"/>

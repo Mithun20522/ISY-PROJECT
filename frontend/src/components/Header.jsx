@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { logoutSuccess } from '../redux/user/userSlice';
+import logo from '../imgs/logo.jpeg';
 const Header = () => {
   const [clicked, setClicked] = useState(false);
   const [userLogout, setUserLogout] = useState(false);
@@ -35,14 +36,18 @@ const Header = () => {
   }
 
   return (
-    <header className='p-7 flex items-center justify-between bg-slate-300 shadow-md border-b-2 border-black'>
-        <h1 className='cursor-pointer'>CollegeBuddy</h1>
+    <header className='p-7 flex items-center justify-between bg-slate-400 shadow-md border-b-2 border-black'>
+        {/* <h1 className='cursor-pointer'>CollegeBuddy</h1> */}
+        <div className='flex justify-center items-center gap-2'>
+        <img src={logo} alt="logo" className='w-14 rounded-full bg-transparent h-14' />
+        <h1 className='text-xl font-bold text-white'>mind<span className='text-red-500 text-3xl'>Link</span></h1>
+        </div>
         <AiOutlineMenu className='sm:hidden' onClick={() => setClicked(!clicked)}/>
         <ul className='hidden sm:flex gap-5 items-center mx-24'>
-                <Link className='hover:scale-75 transition-all duration-50 ease-out' to={'/'}><li>Home</li></Link>
-                <Link className='hover:scale-75 transition-all duration-50 ease-out' to={'/peer-connect'}><li>Peer connect</li></Link>
-                <Link className='hover:scale-75 transition-all duration-50 ease-out' to={'/resources'}><li>Resources</li></Link>
-                <Link className='hover:scale-75 transition-all duration-50 ease-out' to={'/well-being'}><li>Well being cell</li></Link>
+                <Link className='hover:scale-75 transition-all duration-50 ease-out text-xl font-semibold text-slate-100' to={'/'}><li>Home</li></Link>
+                <Link className='hover:scale-75 transition-all duration-50 ease-out text-xl font-semibold text-slate-100' to={'/peer-connect'}><li>Peer connect</li></Link>
+                <Link className='hover:scale-75 transition-all duration-50 ease-out text-xl font-semibold text-slate-100' to={'/resources'}><li>Resources</li></Link>
+                <Link className='hover:scale-75 transition-all duration-50 ease-out text-xl font-semibold text-slate-100' to={'/well-being'}><li>Well being cell</li></Link>
                 {
                   currentUser ? (
                       <div className=''>
