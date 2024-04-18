@@ -34,17 +34,14 @@ app.use('/api/chat', chatRouter);
 app.use('/api/room', roomRouter);
 app.use('/api/member', memberRouter);
 
-// io.on('connection', (socket) => {
-//     console.log('a user connected: ', socket.id);
-
-//     socket.on('chatMessage', (data) => {
-//         socket.broadcast.emit('chatMessage', {message:data.message});
-//     })
-
-//     socket.on('disconnect', () => {
-//         console.log('User disconnected: ' + socket.id);
-//       });
-// })
+io.on('connection', (socket) => {
+    socket.on('chatMessage', (data) => {
+        socket.broadcast.emit('chatMessage', {message:data.message, sender:data.sender});
+    })
+    socket.on('disconnect', () => {
+        // console.log('User disconnected: ' + socket.id);
+      });
+})
 
 server.listen(process.env.PORT, () => {
     console.log(`server running on ${process.env.PORT}`);

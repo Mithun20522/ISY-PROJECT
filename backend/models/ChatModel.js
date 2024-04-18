@@ -6,12 +6,12 @@ const chatSchema = new mongoose.Schema({
         required:true
     },
     sender:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'User'
+        type:String,
+        required:true
     },
     reciever:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'User'
+        type:String,
+        required:true
     }
 },{timestamps:true});
 

@@ -2,13 +2,15 @@ import {configureStore, combineReducers} from '@reduxjs/toolkit';
 import userReducer from './user/userSlice.js';
 import roomReducer from './room/roomSlice.js';
 import memberReducer from './room/memberSlice.js';
+import chatReducer from './chat/chatSlice.js';
 import {persistReducer, persistStore} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import {FLUSH, REHYDRATE, PAUSE, REGISTER, PURGE, PERSIST} from 'redux-persist';
 const rootReducer = combineReducers({
     user:userReducer,
     room:roomReducer,
-    member:memberReducer
+    member:memberReducer,
+    chat:chatReducer
 });
 
 const persistConfig = {

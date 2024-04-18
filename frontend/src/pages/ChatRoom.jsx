@@ -4,13 +4,48 @@ import { useSelector } from 'react-redux';
 import {AiOutlineClose} from 'react-icons/ai'
 import toast from "react-hot-toast";
 import { RiAdminFill } from "react-icons/ri";
+import { io } from 'socket.io-client';
 const ChatRoom = () => {
   const {currentRoom} = useSelector((state) => state.room);
   const {currentUser} = useSelector((state) => state.user);
   const [membersInfo, setMembersInfo] = useState([]);
   const [click, setClick] = useState(false);
   const [memberToBeRemoved, setMemberToBeRemoved] = useState({});
+  const [messages, setMessages] = useState([]);
+  const [socket, setSocket] = useState(null);
+  const [inputValue, setInputValue] = useState('');
   const {member} = useSelector((state) => state.member);
+
+
+  useEffect(() => {
+    const newSocket = io('http://localhost:3000', { transports: ['websocket'] });
+    setSocket(newSocket);
+    return () => {
+      newSocket.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on('chatMessage', ({ message, sender }) => {
+      setMessages((prevMessages) => [...prevMessages, { message, sender}]);
+    });
+
+    return () => {
+      socket.off('chatMessage');
+    };
+  }, [socket]);
+
+  const sendMessage = () => {
+    if (!socket || !inputValue.trim()) return;
+
+    socket.emit('chatMessage', { message: inputValue, sender:currentUser.rest.username });
+    setMessages((prevMessages) => [...prevMessages, { message: inputValue, sender:currentUser.rest.username }]);
+    
+    setInputValue('');
+  };
+
   useEffect(() => {
     const getMembersInfoFromRoom = async() => {
       try {
@@ -94,53 +129,19 @@ const ChatRoom = () => {
             <div>
                 <div className="h-[55vh] rounded-lg bg-slate-50 overflow-scroll space-y-1 relative px-3">
                   <div className="flex flex-col">
-                  <div className="max-w-fit p-2 incoming_message mr-auto">
+                  {
+                    messages.map((data,index) => (
+                      <div key={index} className={`max-w-fit p-2 incoming_message ${data.sender === currentUser.rest.username ? 'ml-auto' : 'mr-auto'}`}>
                     <div className="w-fit flex gap-1 items-center font-medium p-1 ">
-                        <img src={member.members[0].avatar} alt="member" className="w-6 h-6" />
-                        <p className="text-[0.6rem]">akash kumar</p>
+                        <img src={currentUser.rest.avatar} alt="member" className="w-6 h-6" />
+                        <p className="text-[0.6rem]">{data.sender}</p>
                     </div>
                     <p className={`bg-slate-200 shadow-sm p-3 overflow-hidden rounded-lg max-w-lg`}>
-                    Hey everyone, how are you all coping with the stress of upcoming exams?
+                      {data.message}
                     </p>
-                  </div>
-                  <div className="max-w-fit p-2 incoming_message mr-auto">
-                    <div className="w-fit flex gap-1 items-center font-medium p-1 ">
-                        <img src={member.members[0].avatar} alt="member" className="w-6 h-6" />
-                        <p className="text-[0.6rem]">rohan gupta</p>
                     </div>
-                    <p className={`bg-slate-200 shadow-sm p-3 overflow-hidden rounded-lg max-w-lg`}>
-                    Hey akash, I'm honestly feeling pretty overwhelmed. There's just so much to study, and I feel like I'm running out of time
-
-                    </p>
-                  </div>
-                  <div className="max-w-fit p-2 incoming_message mr-auto">
-                    <div className="w-fit flex gap-1 items-center font-medium p-1 ">
-                        <img src={member.members[0].avatar} alt="member" className="w-6 h-6" />
-                        <p className="text-[0.6rem]">mithunverma01</p>
-                    </div>
-                    <p className={`bg-green-200 shadow-sm p-3 overflow-hidden rounded-lg max-w-lg`}>
-                    Yeah, I've been feeling the pressure too. I find that taking short breaks and doing some exercise really helps me clear my mind
-                    </p>
-                  </div>
-                  <div className="max-w-fit p-2 incoming_message ml-auto">
-                    <div className="w-fit flex gap-1 items-center font-medium p-1 ">
-                        <img src={member.members[0].avatar} alt="member" className="w-6 h-6" />
-                        <p className="text-[0.6rem]">anonymous253</p>
-                    </div>
-                    <p className={`bg-slate-200 shadow-sm p-3 overflow-hidden rounded-lg max-w-lg`}>
-                    That sounds helpful. I might give that a try. It's comforting to know that we're all in this together and can support each other through it.
-                    </p>
-                  </div>
-                  <div className="max-w-fit p-2 outgoing_message mr-auto">
-                    <div className="w-fit flex gap-1 items-center font-medium p-1 ml-auto">
-                        <img src={member.members[0].avatar} alt="member" className="w-6 h-6" />
-                        <p className="text-[0.6rem]">amit malik</p>
-                    </div>
-                    <p className={`bg-slate-200 shadow-sm p-3 overflow-hidden rounded-lg max-w-lg`}>
-                    That's a good idea, rohan. I've also been trying to practice mindfulness and meditation to help manage my stress
-
-                    </p>
-                  </div>
+                    ))
+                  }
                   </div>
                 
                   
@@ -160,8 +161,8 @@ const ChatRoom = () => {
                 </div>
 
                 <div className="flex items-center relative">
-                    <input id="message" type="text" placeholder='Type message.....' className="bg-slate-200 outline-none rounded-md p-3 w-full" />
-                    <IoMdSend className="text-3xl absolute right-5 hover:bg-slate-500 hover:p-2 rounded-full cursor-pointer hover:text-white transition duration-200 ease-in-out"/>
+                    <input id="message" value={inputValue} onChange={(e) => setInputValue(e.target.value)} type="text" placeholder='Type message.....' className="bg-slate-200 outline-none rounded-md p-3 w-full" />
+                    <IoMdSend onClick={sendMessage} className="text-3xl absolute right-5 hover:bg-slate-500 hover:p-2 rounded-full cursor-pointer hover:text-white transition duration-200 ease-in-out"/>
                 </div>
             </div>
         </div>
