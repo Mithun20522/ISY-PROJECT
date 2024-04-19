@@ -26,14 +26,17 @@ const ChatRoom = () => {
   const [isScrolledToBottom, setIsScrolledToBottom] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  let currUser = currentUser.rest.username;
-  
-  const val = member && member.members.some((data) => {
-    if(data.userId === currentUser.rest._id){
-      currUser = data.username;
-      return;
-    }
-  });
+  const [currUser, setCurrUser] = useState('');
+
+
+  useEffect(() => {
+    membersInfo && membersInfo.some((data) => {
+      if(data.userId === currentUser.rest._id){
+        setCurrUser(data.username);
+      }
+    })
+  },[currUser, membersInfo])
+
 
   useEffect(() => {
     const newSocket = io('https://mindlink-backend.onrender.com', { transports: ['websocket'] });
@@ -46,7 +49,6 @@ const ChatRoom = () => {
   useEffect(() => {
     messageboxRef.current.scrollTop = messageboxRef.current.scrollHeight;
   },[messageInfo])
-  
   
 
   useEffect(() => {
