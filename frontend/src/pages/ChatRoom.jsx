@@ -27,7 +27,7 @@ const ChatRoom = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   let currUser = currentUser.rest.username;
-
+  
   const val = member && member.members.some((data) => {
     if(data.userId === currentUser.rest._id){
       currUser = data.username;

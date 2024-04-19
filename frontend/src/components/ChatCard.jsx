@@ -94,7 +94,7 @@ const generateRandomString = () => {
         if(currentUser && currentUser.rest && room){
           dispatch(joinRoomStart());
           dispatch(joinRoomSuccess(room));
-          dispatch(addMemberAnonymousStart());
+          dispatch(addMemberStart());
           const currentMembersRes = await fetch(`https://mindlink-backend.onrender.com/api/room/get-room/${room._id}`);
           const currentMembersData = await currentMembersRes.json();
           const currentMembers = currentMembersData.members;
@@ -110,14 +110,14 @@ const generateRandomString = () => {
           const member = await res2.json();
           if(res2.ok){
             dispatch(joinRoomSuccess(room));
-            dispatch(addMemberAnonymousSuccess({member, id:member.room._id, roomTitle:room.roomTitle}));
+            dispatch(addMemberSuccess({member, id:member.room._id, roomTitle:room.roomTitle}));
             toast.success(`you joined as "${anonymousName}"`);
             navigate('/chatroom');
           }
           else{
             toast.error(member.message);
             dispatch(joinRoomFailure(member.message));
-            dispatch(addMemberAnonymousFailure(member.message));
+            dispatch(addMemberFailure(member.message));
             console.log(member.message);
             return;
           }
@@ -126,7 +126,7 @@ const generateRandomString = () => {
         else{
           toast.error('Login required to join the room');
           dispatch(joinRoomFailure(room.error));
-          dispatch(addMemberAnonymousFailure(room.error));
+          dispatch(addMemberFailure(room.error));
           return;
         }
     } catch (error) {
