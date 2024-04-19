@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import img1 from "../../public/homeImg.png";
+import img1 from '../imgs/homeImg.jpeg';
 import { useState } from "react";
 import toast from "react-hot-toast";
 import {useDispatch, useSelector} from 'react-redux';
@@ -51,18 +51,18 @@ const handleChange = (e) => {
 }
   // console.log(loading);
   return (
-    <div className="flex sm:justify-between justify-center w-full min-h-screen bg-slate-300">
+    <div className="flex sm:justify-between justify-center w-full min-h-screen ">
       <img
         src={img1}
         alt="image"
-        className="hidden sm:block w-[50vw] h-[100vh]"
+        className="hidden sm:block w-[50vw] h-[70vh] mt-10 mx-10"
       />
       <form className="flex flex-col gap-3 mt-24 sm:mr-28" onSubmit={handleSubmit}>
         <h1 className="text-center mb-5 text-3xl font-semibold">
           Login to your account
         </h1>
         <input
-          className="bg-white outline-none px-32 py-3 rounded-md shadow-md"
+          className="bg-slate-200 outline-none px-32 py-3 rounded-md shadow-md"
           type="email"
           id="email"
           required
@@ -70,7 +70,7 @@ const handleChange = (e) => {
           placeholder="Email"
         />
         <input
-          className="bg-white outline-none px-32 py-3 rounded-md shadow-md"
+          className="bg-slate-200 outline-none px-32 py-3 rounded-md shadow-md"
           type="password"
           id="password"
           required
