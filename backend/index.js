@@ -28,7 +28,9 @@ mongoose.connect(process.env.MONGO_DB_URL)
 .then(() => console.log('MongoDB connected successfully'))
 .catch((err) => console.log(err))
 
-
+app.get('/',(req, res) => {
+    return res.json({message:'Test api'});
+})
 app.use('/api/auth', authRouter);
 app.use('/api/chat', chatRouter);
 app.use('/api/room', roomRouter);
