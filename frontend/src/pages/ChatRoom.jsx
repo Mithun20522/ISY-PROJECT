@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoMdSend } from "react-icons/io";
 import { useSelector } from 'react-redux';
 import {AiOutlineClose} from 'react-icons/ai'
@@ -10,6 +10,7 @@ import { MdOutlineDeleteSweep } from "react-icons/md";
 
 const ChatRoom = () => {
   const {currentRoom} = useSelector((state) => state.room);
+  const messageboxRef = useRef(null);
   const {currentUser} = useSelector((state) => state.user);
   const [membersInfo, setMembersInfo] = useState([]);
   const [click, setClick] = useState(false);
@@ -26,6 +27,10 @@ const ChatRoom = () => {
       newSocket.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    messageboxRef.current.scrollTop = messageboxRef.current.scrollHeight;
+  },[messageInfo])
 
   useEffect(() => {
     if (!socket) return;
@@ -182,7 +187,7 @@ const ChatRoom = () => {
           <MdOutlineDeleteSweep onClick={handleChatDelete} className={`text-3xl cursor-pointer hover:bg-slate-300 hover:text-white rounded-full p-1 w-10 h-10`}/>
           </div>
             <div>
-                <div className="h-[55vh] rounded-lg bg-slate-50 overflow-scroll space-y-1 relative px-3">
+                <div ref={messageboxRef} className="h-[55vh] rounded-lg bg-slate-50 overflow-y-auto space-y-1 relative px-3">
                   <div className="flex flex-col">
                   {
                     messageInfo.length > 0 ? messageInfo.map((data) => (
@@ -204,7 +209,7 @@ const ChatRoom = () => {
                 </div>
 
                 <div className="flex items-center relative">
-                    <input id="message" value={inputValue} onChange={(e) => setInputValue(e.target.value)} type="text" placeholder='Type message.....' className="bg-slate-200 outline-none rounded-md p-3 w-full" />
+                    <input id="message" value={inputValue} onKeyUp={(e) => e.key === 'Enter' && sendMessage()} onChange={(e) => setInputValue(e.target.value)} type="text" placeholder='Type message.....' className="bg-slate-200 outline-none rounded-md p-3 w-full" />
                     <IoMdSend onClick={sendMessage} className="text-3xl absolute right-5 hover:bg-slate-500 hover:p-2 rounded-full cursor-pointer hover:text-white transition duration-200 ease-in-out"/>
                 </div>
             </div>
