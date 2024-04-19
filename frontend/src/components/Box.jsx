@@ -1,10 +1,15 @@
 import React from 'react'
-const Box = () => {
-  
+import {Link} from 'react-router-dom'
+const Box = ({src, title, url}) => {
   return (
-    <div className='border p-7 bg-slate-50 shadow-md sm:mx-24 mx-20 mt-5 rounded-2xl'>
-        <h1 className='text-center mb-2 font-bold text-xl text-teal-500'>College buddy</h1>
-        <p className='text-sm text-center'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima eaque nam dicta?</p>
+    <div className='bg-slate-100 p-7 max-w-fit text-center space-y-3 mx-auto transition duration-300 ease-in-out hover:scale-105 cursor-pointer rounded-lg shadow-md border'>
+      <img src={src} alt={title} className='w-[300px] h-[300px]' />
+      <h1 className='text-center font-bold'>{title}</h1>
+    <div className='bg-teal-500 w-[100%] text-lg font-semibold text-white p-2 hover:bg-teal-700 rounded-md hover:text-white'>
+      <Link target='_blank' to={url}>
+        Read more
+      </Link>
+    </div>
     </div>
   )
 }
