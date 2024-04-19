@@ -26,11 +26,9 @@ const ChatRoom = () => {
   const [isScrolledToBottom, setIsScrolledToBottom] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { members } = member.member.room;
   let currUser = currentUser.rest.username;
 
-  // console.log(members);
-  const val = members && members.some((data) => {
+  const val = member && member.members.some((data) => {
     if(data.userId === currentUser.rest._id){
       currUser = data.username;
       return;
