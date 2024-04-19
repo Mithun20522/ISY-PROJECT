@@ -158,7 +158,7 @@ const ChatRoom = () => {
             ))
           }
             {
-              click && (
+              currentUser.rest.isAdmin && click && (
                 <div className="bg-slate-400 absolute p-3 top-20 rounded-lg space-y-2 left-[40%]">
                   <p className="text-sm font-bold text-white max-w-xs">Sure you want to remove <span className="font-bold">{`"${memberToBeRemoved.memberName}"`}</span> ?</p>
                   <div className="flex justify-between mx-2">

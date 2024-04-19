@@ -20,6 +20,7 @@ const ChatCard = ({room}) => {
       const res = await fetch(`http://localhost:3000/api/room/delete-room/${room._id}`,{
         method:'DELETE'
       });
+      await fetch(`http://localhost:3000/api/chat/deletemessage/${room._id}`,{method:'DELETE'});
       const data = await res.json();
       if(res.ok){
         toast.success(data.message);
@@ -84,14 +85,14 @@ const ChatCard = ({room}) => {
   }
 
   return (
-    <div className='bg-slate-50 p-4 mt-5 w-[200px] h-[200px] space-y-2 rounded-3xl border text-center content-center ml-10'>
+    <div className='bg-purple-50 p-4 mt-5 w-[400px] h-[200px] space-y-2 rounded-3xl border text-center content-center ml-10 shadow-md'>
         <h2 className='text-xl'>{room.roomTitle}</h2>
         <p className='text-xs'>Members: {room.members.length}</p>
         <div className="flex items-center justify-evenly">
         {isMember ? (
-          <Link to="/chatroom" onClick={() => dispatch(addMemberSuccess({members:room.members, id:room._id,title:room.roomTitle}))} className='bg-blue-600 px-4 rounded-full text-sm py-1 text-white hover:bg-blue-800'>View</Link>
+          <Link to="/chatroom" onClick={() => dispatch(addMemberSuccess({members:room.members, id:room._id,title:room.roomTitle}))} className='bg-blue-600 px-12 rounded-full text-sm py-2 text-white hover:bg-blue-800'>View</Link>
         ) : (
-          <button onClick={handleJoinRoom} className='bg-green-600 px-4 rounded-full text-sm py-1 text-white hover:bg-green-800'>Join</button>
+          <button onClick={handleJoinRoom} className='bg-green-600 px-12 rounded-full text-sm py-2 text-white hover:bg-green-800'>Join</button>
         )}
         {/* {
           joined && (
@@ -106,7 +107,7 @@ const ChatCard = ({room}) => {
         } */}
           {
             currentUser?.rest.isAdmin ? (
-              <MdDelete onClick={handleDelete} className="text-xl cursor-pointer hover:scale-100 transition-shadow duration-100"/>
+              <MdDelete onClick={handleDelete} className="text-2xl rounded-full w-10 h-10 p-1 hover:bg-gray-300 cursor-pointer "/>
             ) : ''
           }
         </div>
