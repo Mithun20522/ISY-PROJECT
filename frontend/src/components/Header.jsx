@@ -37,24 +37,23 @@ const Header = () => {
 
   return (
     <header className='p-7 flex items-center justify-between bg-slate-400 shadow-md border-b-2 border-black'>
-        {/* <h1 className='cursor-pointer'>CollegeBuddy</h1> */}
-        <div className='flex justify-center items-center gap-2'>
+        <div className='flex justify-center items-center gap-2 cursor-pointer'>
         <img src={logo} alt="logo" className='w-14 rounded-full bg-transparent h-14' />
         <h1 className='text-xl font-bold text-white'>mind<span className='text-red-500 text-3xl'>Link</span></h1>
         </div>
         <AiOutlineMenu className='sm:hidden' onClick={() => setClicked(!clicked)}/>
         <ul className='hidden sm:flex gap-5 items-center mx-24'>
-                <Link className='hover:scale-75 transition-all duration-50 ease-out text-xl font-semibold text-slate-100' to={'/'}><li>Home</li></Link>
-                <Link className='hover:scale-75 transition-all duration-50 ease-out text-xl font-semibold text-slate-100' to={'/peer-connect'}><li>Peer connect</li></Link>
-                <Link className='hover:scale-75 transition-all duration-50 ease-out text-xl font-semibold text-slate-100' to={'/resources'}><li>Resources</li></Link>
-                <Link className='hover:scale-75 transition-all duration-50 ease-out text-xl font-semibold text-slate-100' to={'/well-being'}><li>Well being cell</li></Link>
+                <Link className='hover:scale-75 transition-all duration-50 ease-out text-xl font-semibold text-slate-50' to={'/'}><li>Home</li></Link>
+                <Link className='hover:scale-75 transition-all duration-50 ease-out text-xl font-semibold text-slate-50' to={'/peer-connect'}><li>Peer connect</li></Link>
+                <Link className='hover:scale-75 transition-all duration-50 ease-out text-xl font-semibold text-slate-50' to={'/resources'}><li>Resources</li></Link>
+                <Link className='hover:scale-75 transition-all duration-50 ease-out text-xl font-semibold text-slate-50' to={'/well-being'}><li>Well being cell</li></Link>
                 {
                   currentUser ? (
                       <div className=''>
                         <img src={currentUser.rest.avatar} onClick={() => setUserLogout(!userLogout)} alt={currentUser.rest.username} className='w-10 h-10 cursor-pointer rounded-full'/>
                          {
                           userLogout ? (
-                            <div className='bg-sky-300 absolute px-12 py-3 right-[7%] space-y-5 rounded-lg shadow-lg items-center'>
+                            <div className='bg-slate-300 absolute px-12 py-3 right-[7%] space-y-5 rounded-lg shadow-lg items-center'>
                               <p className='text-xl'>Are you sure you want to logout ? </p>
                               <div className='flex justify-between'>
                               <button className='bg-slate-500 px-3 text-sm rounded-md hover:bg-slate-700 font-medium text-white' onClick={() => setUserLogout(!userLogout)}>No</button>

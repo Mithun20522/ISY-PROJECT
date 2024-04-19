@@ -12,19 +12,19 @@ const Resources = () => {
       </p>
       </div>
       <div className='flex flex-col gap-10 mt-10'>
-        <Link to={'https://positivepsychology.com/mental-health-exercises-interventions/'} className='hover:underline hover:text-blue-500 text-xl'>
+        <Link target="_blank" to={'https://positivepsychology.com/mental-health-exercises-interventions/'} className='hover:underline hover:text-blue-500 text-xl'>
         <div className='flex gap-2 justify-center items-center'>
           <h1>19 Mental Health Exercises & Interventions for Wellbeing</h1>
           <FiExternalLink className='text-2xl'/>
         </div>
         </Link>
-        <Link className='hover:underline hover:text-blue-500 text-xl' to={'https://www.helpguide.org/articles/healthy-living/the-mental-health-benefits-of-exercise.htm'}>
+        <Link target="_blank" className='hover:underline hover:text-blue-500 text-xl' to={'https://www.helpguide.org/articles/healthy-living/the-mental-health-benefits-of-exercise.htm'}>
         <div className='flex gap-2 justify-center items-center'>
           <h1>Mental Health Benefits of Exercise</h1>
           <FiExternalLink className='text-2xl'/>
         </div>
         </Link>
-        <Link className='hover:underline hover:text-blue-500 text-xl' to={'https://www.mentalhealth.org.uk/explore-mental-health/publications/how-look-after-your-mental-health-using-exercise'}>
+        <Link target="_blank" className='hover:underline hover:text-blue-500 text-xl' to={'https://www.mentalhealth.org.uk/explore-mental-health/publications/how-look-after-your-mental-health-using-exercise'}>
         <div className='flex gap-2 justify-center items-center'>
           <h1>How to look after your mental health using exercise</h1>
           <FiExternalLink className='text-2xl'/>
@@ -32,19 +32,19 @@ const Resources = () => {
         </Link>
       </div>
       <div className='flex flex-col gap-10 mt-10'>
-        <Link className='hover:underline hover:text-blue-500 text-xl' to={'https://bcmhsus.ca/about/news-stories/stories/10-tips-to-boost-your-mental-health'}>
+        <Link target="_blank" className='hover:underline hover:text-blue-500 text-xl' to={'https://bcmhsus.ca/about/news-stories/stories/10-tips-to-boost-your-mental-health'}>
         <div className='flex gap-2 justify-center items-center'>
           <h1>10 tips to boost your mental health</h1>
           <FiExternalLink className='text-2xl'/>
         </div>
         </Link>
-        <Link className='hover:underline hover:text-blue-500 text-xl' to={'https://www.helpguide.org/articles/mental-health/building-better-mental-health.htm'}>
+        <Link target="_blank" className='hover:underline hover:text-blue-500 text-xl' to={'https://www.helpguide.org/articles/mental-health/building-better-mental-health.htm'}>
         <div className='flex gap-2 justify-center items-center'>
           <h1>Building Better Mental Health</h1>
           <FiExternalLink className='text-2xl'/>
         </div>
         </Link>
-        <Link className='hover:underline hover:text-blue-500 text-xl mb-10' to={'https://www.mind.org.uk/information-support/tips-for-everyday-living/wellbeing/'}>
+        <Link target="_blank" className='hover:underline hover:text-blue-500 text-xl mb-10' to={'https://www.mind.org.uk/information-support/tips-for-everyday-living/wellbeing/'}>
         <div className='flex gap-2 justify-center items-center'>
           <h1>How to improve your mental wellbeing</h1>
           <FiExternalLink className='text-2xl'/>

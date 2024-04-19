@@ -39,7 +39,6 @@ const ChatCard = ({room}) => {
 
   const handleJoinRoom = async() => {
     try {
-
         if(currentUser && currentUser.rest && room){
           dispatch(joinRoomStart());
           dispatch(joinRoomSuccess(room));
@@ -84,6 +83,57 @@ const ChatCard = ({room}) => {
     }
   }
 
+  // function generateRandomString() {
+  //   const randomNumber = Math.floor(Math.random() * 1000);
+  //   return 'anonymous' + randomNumber;
+  // }
+  
+
+  const handleJoinRoomAnonymous = async() => {
+    try {
+        if(currentUser && currentUser.rest && room){
+          dispatch(joinRoomStart());
+          dispatch(joinRoomSuccess(room));
+          dispatch(addMemberStart());
+          const currentMembersRes = await fetch(`http://localhost:3000/api/room/get-room/${room._id}`);
+          const currentMembersData = await currentMembersRes.json();
+          const currentMembers = currentMembersData.members;
+          // const anonymousName = generateRandomString();
+          const updatedMembers = [...currentMembers, {userId:currentUser.rest._id,username:currentUser.rest.username, avatar:currentUser.rest.avatar}];
+          const res2 = await fetch(`http://localhost:3000/api/room/update-room/${room._id}`,{
+            method:'PATCH',
+            headers:{
+              'Content-Type':'application/json'
+            },
+            body:JSON.stringify({members: updatedMembers})
+          })
+          const member = await res2.json();
+          if(res2.ok){
+            dispatch(joinRoomSuccess(room));
+            dispatch(addMemberSuccess({member, id:member.room._id, roomTitle:room.roomTitle}));
+            toast.success(`you joined as "${anonymousName}"`);
+            navigate('/chatroom');
+          }
+          else{
+            toast.error(member.message);
+            dispatch(joinRoomFailure(member.message));
+            dispatch(addMemberFailure(member.message));
+            console.log(member.message);
+            return;
+          }
+
+        }
+        else{
+          toast.error('Login required to join the room');
+          dispatch(joinRoomFailure(room.error));
+          dispatch(addMemberFailure(room.error));
+          return;
+        }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <div className='bg-purple-50 p-4 mt-5 w-[400px] h-[200px] space-y-2 rounded-3xl border text-center content-center ml-10 shadow-md'>
         <h2 className='text-xl'>{room.roomTitle}</h2>
@@ -92,19 +142,11 @@ const ChatCard = ({room}) => {
         {isMember ? (
           <Link to="/chatroom" onClick={() => dispatch(addMemberSuccess({members:room.members, id:room._id,title:room.roomTitle}))} className='bg-blue-600 px-12 rounded-full text-sm py-2 text-white hover:bg-blue-800'>View</Link>
         ) : (
-          <button onClick={handleJoinRoom} className='bg-green-600 px-12 rounded-full text-sm py-2 text-white hover:bg-green-800'>Join</button>
+            <div className="flex flex-col gap-2">
+              <button onClick={handleJoinRoom} className='bg-green-600 px-12 rounded-full text-sm py-2 text-white hover:bg-green-800'>Join</button>
+              <button onClick={handleJoinRoomAnonymous} className='bg-green-600 px-12 rounded-full text-sm py-2 text-white hover:bg-green-800'>Join anonymously</button>
+            </div>
         )}
-        {/* {
-          joined && (
-            <form className="bg-slate-400 p-3 absolute top-20 right-[40vw] rounded-lg">
-              <h1 className=" text-sm font-semibold">would you like to go anonymous?</h1>
-              <div className="flex justify-between px-5 mt-5">
-                <button onClick={() => setJoined(!joined)} className="bg-slate-500 text-sm text-white hover:bg-slate-700 px-3 py-1 rounded-md">No</button>
-                <button type="submit" className="bg-red-500 text-white hover:bg-red-700 text-sm px-3 py-1 rounded-md">Yes</button>
-              </div>
-            </form>
-          )
-        } */}
           {
             currentUser?.rest.isAdmin ? (
               <MdDelete onClick={handleDelete} className="text-2xl rounded-full w-10 h-10 p-1 hover:bg-gray-300 cursor-pointer "/>

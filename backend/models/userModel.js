@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
     },
     avatar:{
         type:String,
-        default:"https://avatar.iran.liara.run/public/boy"
+        default:"https://avatar.iran.liara.run/public/50"
     },
     isAdmin:{
         type:Boolean,

@@ -10,8 +10,10 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import {Toaster} from 'react-hot-toast';
 import ChatRoom from './pages/ChatRoom';
+import { useSelector } from 'react-redux';
 
 const App = () => {
+  const {currentUser} = useSelector((state) => state.user);
   return (
     <>
     <Header/>
@@ -22,10 +24,10 @@ const App = () => {
       <Route path='/peer-connect' element={<PeerConnect/>} />
       <Route path='/resources' element={<Resources/>} />
       <Route path='/well-being' element={<WellBeing/>} />
-      <Route path='/chatroom' element={<ChatRoom/>} />
+      {currentUser && currentUser.rest && <Route path='/chatroom' element={<ChatRoom/>} />}
       <Route path='*' element={<PageNotFound/>} />
     </Routes>
-    {/* <Footer/> */}
+    <Footer/>
     <Toaster/>
     </>
   )

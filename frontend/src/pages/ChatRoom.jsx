@@ -124,18 +124,25 @@ const ChatRoom = () => {
 
   const handleChatDelete = async(req, res) => {
     try {
-      const res = await fetch(`http://localhost:3000/api/chat/deletemessage/${member.id}`,{method:'DELETE',
-    headers:{
-      'Content-Type':'application/json'
-    }});
-    const data = await res.json();
-    if(res.ok){
-      toast.success('Chat deleted successfully');
-    }
-    else{
-      toast.error(data.message);
-      return;
-    }
+      if(currentUser && currentUser.rest.isAdmin){
+        const res = await fetch(`http://localhost:3000/api/chat/deletemessage/${member.id}`,{method:'DELETE',
+        headers:{
+          'Content-Type':'application/json'
+        }});
+        const data = await res.json();
+        if(res.ok){
+          toast.success('Chat deleted successfully');
+        }
+        else{
+          toast.error(data.message);
+          return;
+        }
+      }
+      else{
+        toast.error('You can not delete the chat');
+        return;
+      }
+      
     } catch (error) {
       console.log(error);
     }
@@ -172,7 +179,7 @@ const ChatRoom = () => {
         <div className="w-full">
           <div className="bg-slate-100 border flex items-center justify-between px-7">
           <h1 className="text-xl font-bold text-black p-2 text-center">{member.title}</h1>
-          <MdOutlineDeleteSweep onClick={handleChatDelete} className="text-3xl cursor-pointer hover:bg-slate-300 hover:text-white rounded-full p-1 w-10 h-10"/>
+          <MdOutlineDeleteSweep onClick={handleChatDelete} className={`text-3xl cursor-pointer hover:bg-slate-300 hover:text-white rounded-full p-1 w-10 h-10`}/>
           </div>
             <div>
                 <div className="h-[55vh] rounded-lg bg-slate-50 overflow-scroll space-y-1 relative px-3">
