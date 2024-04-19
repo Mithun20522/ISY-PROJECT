@@ -2,10 +2,12 @@ import React from 'react'
 import Box from '../components/Box'
 import { FiExternalLink } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
+import well from '../imgs/wellbeing.jpeg'
 
 const WellBeing = () => {
   return (
     <section className=''>
+      <img src={well} alt="well" className='w-[100%] bg-cover' />
       <div className="bg-slate-100 p-7 mx-[10vw] space-y-5 mt-10 rounded-2xl shadow-lg">
         <h1 className="text-center text-2xl font-bold font-sans">
           Welcome to the Wellbeing Page
