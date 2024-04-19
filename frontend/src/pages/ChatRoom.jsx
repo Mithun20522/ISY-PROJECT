@@ -5,6 +5,9 @@ import {AiOutlineClose} from 'react-icons/ai'
 import toast from "react-hot-toast";
 import { RiAdminFill } from "react-icons/ri";
 import { io } from 'socket.io-client';
+import moment from 'moment';
+import { MdOutlineDeleteSweep } from "react-icons/md";
+
 const ChatRoom = () => {
   const {currentRoom} = useSelector((state) => state.room);
   const {currentUser} = useSelector((state) => state.user);
@@ -15,8 +18,7 @@ const ChatRoom = () => {
   const [socket, setSocket] = useState(null);
   const [inputValue, setInputValue] = useState('');
   const {member} = useSelector((state) => state.member);
-
-
+  const [messageInfo, setMessageInfo] = useState([]);
   useEffect(() => {
     const newSocket = io('http://localhost:3000', { transports: ['websocket'] });
     setSocket(newSocket);
@@ -28,8 +30,8 @@ const ChatRoom = () => {
   useEffect(() => {
     if (!socket) return;
 
-    socket.on('chatMessage', ({ message, sender }) => {
-      setMessages((prevMessages) => [...prevMessages, { message, sender}]);
+    socket.on('chatMessage', ({ message, sender,roomId }) => {
+      setMessages((prevMessages) => [...prevMessages, { message, sender, roomId}]);
     });
 
     return () => {
@@ -37,15 +39,39 @@ const ChatRoom = () => {
     };
   }, [socket]);
 
-  const sendMessage = () => {
-    if (!socket || !inputValue.trim()) return;
+  useEffect(() => {
+    const getMessages = async() => {
+      const res = await fetch(`http://localhost:3000/api/chat/getmessages`,{method:'GET'});
+      const data = await res.json();
+      // console.log(data)
+      setMessageInfo(data);
+    }
+    getMessages();
+  },[messageInfo]);
 
-    socket.emit('chatMessage', { message: inputValue, sender:currentUser.rest.username });
-    setMessages((prevMessages) => [...prevMessages, { message: inputValue, sender:currentUser.rest.username }]);
-    
-    setInputValue('');
+  const sendMessage = async() => {
+    try {
+      if (!socket || !inputValue.trim()) return;
+      socket.emit('chatMessage', { message: inputValue, sender:currentUser.rest.username, roomId:member.roomId });
+      // setMessages((prevMessages) => [...prevMessages, { message: inputValue, sender:currentUser.rest.username }]);
+      setInputValue('');
+      const res = await fetch('http://localhost:3000/api/chat/sendmessage',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({ message: inputValue, sender:currentUser.rest.username, roomId:member.roomId })
+      });
+      const data = await res.json();
+      if(res.ok){
+        setMessages(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
+  // console.log(messageInfo)
   useEffect(() => {
     const getMembersInfoFromRoom = async() => {
       try {
@@ -96,10 +122,11 @@ const ChatRoom = () => {
       console.log(error)
     }
   }
+
   return (
-    <section className='flex max-w-5xl mx-auto mt-10 border'>
+    <section className='flex max-w-5xl mx-auto mt-10 border rounded-lg shadow-md'>
       <div className='bg-slate-100 w-[20vw] border'>
-      <h1 className="text-center p-4 border-b border-black ">All Members: {membersInfo && membersInfo.length > 0 ? membersInfo.length : 0}</h1>
+      <h1 className="text-center border-b py-[10px] border-black ">All Members: {membersInfo && membersInfo.length > 0 ? membersInfo.length : 0}</h1>
           {
             membersInfo && membersInfo.map((room) => (
               <div key={room.userId} onClick={() => {
@@ -125,13 +152,13 @@ const ChatRoom = () => {
             }
           </div>
         <div className="w-full">
-            <h1 className="text-center text-lg font-medium text-black border bg-slate-100 p-2">{member.title}</h1>
+          <h1 className="text-lg font-medium text-black p-2 bg-slate-100 border text-center">{member.title}</h1>
             <div>
                 <div className="h-[55vh] rounded-lg bg-slate-50 overflow-scroll space-y-1 relative px-3">
                   <div className="flex flex-col">
                   {
-                    messages.map((data,index) => (
-                      <div key={index} className={`max-w-fit p-2 incoming_message ${data.sender === currentUser.rest.username ? 'ml-auto' : 'mr-auto'}`}>
+                    messageInfo.map((data) => (
+                      <div key={data._id} className={`max-w-fit p-2 incoming_message ${data.sender === currentUser.rest.username ? 'ml-auto' : 'mr-auto'}`}>
                     <div className="w-fit flex gap-1 items-center font-medium p-1 ">
                         <img src={currentUser.rest.avatar} alt="member" className="w-6 h-6" />
                         <p className="text-[0.6rem]">{data.sender}</p>
@@ -139,25 +166,11 @@ const ChatRoom = () => {
                     <p className={`bg-slate-200 shadow-sm p-3 overflow-hidden rounded-lg max-w-lg`}>
                       {data.message}
                     </p>
+                      <span className="text-gray-400 text-xs">{moment(data.createdAt).fromNow()}</span>
                     </div>
                     ))
                   }
                   </div>
-                
-                  
-                {/* {
-                  membersInfo && membersInfo.map((room) => (
-                    <div key={room.userId} className="max-w-fit p-2">
-                    <div className="w-fit flex gap-1 items-center font-medium p-1 ">
-                        <img src={room.avatar} alt="member" className="w-6 h-6" />
-                        <p className="text-[0.6rem]">{room.username}</p>
-                    </div>
-                    <p className={`${currentUser.rest.isAdmin && currentUser.rest._id === room.userId ? 'bg-green-200' : 'bg-slate-200'} shadow-sm p-3 overflow-hidden rounded-lg max-w-lg`}>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit facilis hic aperiam ullam unde magnam, labore repellendus!
-                    </p>
-                  </div>
-                  ))
-                } */}
                 </div>
 
                 <div className="flex items-center relative">

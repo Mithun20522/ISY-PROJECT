@@ -2,16 +2,13 @@ import mongoose  from 'mongoose';
 
 const chatSchema = new mongoose.Schema({
     message:{
-        type:String,
-        required:true
+        type:String
     },
     sender:{
-        type:String,
-        required:true
+        type:String
     },
-    reciever:{
-        type:String,
-        required:true
+    roomId:{
+        type:String
     }
 },{timestamps:true});
 

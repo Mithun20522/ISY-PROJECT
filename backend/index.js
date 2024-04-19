@@ -36,7 +36,7 @@ app.use('/api/member', memberRouter);
 
 io.on('connection', (socket) => {
     socket.on('chatMessage', (data) => {
-        socket.broadcast.emit('chatMessage', {message:data.message, sender:data.sender});
+        socket.broadcast.emit('chatMessage', {message:data.message, sender:data.sender, roomId:data.roomId});
     })
     socket.on('disconnect', () => {
         // console.log('User disconnected: ' + socket.id);
