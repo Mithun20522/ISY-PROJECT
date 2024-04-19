@@ -22,6 +22,15 @@ const ChatRoom = () => {
   const [messageInfo, setMessageInfo] = useState([]);
   const [isScrolledToBottom, setIsScrolledToBottom] = useState(true);
 
+  let currUser = currentUser.rest.username;
+
+  const val = member && member.members.some((data) => {
+    if(data.userId === currentUser.rest._id){
+      currUser = data.username;
+      return;
+    }
+  });
+
   useEffect(() => {
     const newSocket = io('https://mindlink-backend.onrender.com', { transports: ['websocket'] });
     setSocket(newSocket);
@@ -60,7 +69,7 @@ const ChatRoom = () => {
   const sendMessage = async() => {
     try {
       if (!socket || !inputValue.trim()) return;
-      socket.emit('chatMessage', { message: inputValue, sender:currentUser.rest.username, roomId:member.id });
+      socket.emit('chatMessage', { message: inputValue, sender:currUser, roomId:member.id });
       // setMessages((prevMessages) => [...prevMessages, { message: inputValue, sender:currentUser.rest.username }]);
       setInputValue('');
       const res = await fetch('https://mindlink-backend.onrender.com/api/chat/sendmessage',{
@@ -68,7 +77,7 @@ const ChatRoom = () => {
       headers:{
         'Content-Type':'application/json'
       },
-      body:JSON.stringify({ message: inputValue, sender:currentUser.rest.username, roomId:member.id })
+      body:JSON.stringify({ message: inputValue, sender:currUser, roomId:member.id })
       });
       const data = await res.json();
       if(res.ok){
@@ -195,7 +204,7 @@ const ChatRoom = () => {
                   <div className="flex flex-col">
                   {
                     messageInfo.length > 0 ? messageInfo.map((data) => (
-                      <div key={data._id} className={`max-w-fit p-2 incoming_message ${data.sender === currentUser.rest.username ? 'ml-auto' : 'mr-auto'}`}>
+                      <div key={data._id} className={`max-w-fit p-2 incoming_message ${data.sender === currUser ? 'ml-auto' : 'mr-auto'}`}>
                     <div className="w-fit flex gap-1 items-center font-medium p-1 ">
                         <img src={currentUser.rest.avatar} alt="member" className="w-6 h-6" />
                         <p className="text-[0.6rem]">{data.sender}</p>

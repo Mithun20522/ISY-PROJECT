@@ -3,7 +3,7 @@ import { MdDelete } from "react-icons/md";
 import toast from "react-hot-toast";
 import { deleteRoomFailure, deleteRoomStart, deleteRoomSuccess, joinRoomFailure, joinRoomStart, joinRoomSuccess } from "../redux/room/roomSlice";
 import { Link, useNavigate } from 'react-router-dom';
-import { addMemberFailure, addMemberStart, addMemberSuccess } from "../redux/room/memberSlice";
+import { addMemberAnonymousFailure, addMemberAnonymousStart, addMemberAnonymousSuccess, addMemberFailure, addMemberStart, addMemberSuccess } from "../redux/room/memberSlice";
 import { useEffect, useState } from "react";
 
 const ChatCard = ({room}) => {
@@ -83,10 +83,10 @@ const ChatCard = ({room}) => {
     }
   }
 
-  // function generateRandomString() {
-  //   const randomNumber = Math.floor(Math.random() * 1000);
-  //   return 'anonymous' + randomNumber;
-  // }
+const generateRandomString = () => {
+    const randomNumber = Math.floor(Math.random() * 1000);
+    return 'anonymous' + randomNumber;
+}
   
 
   const handleJoinRoomAnonymous = async() => {
@@ -94,12 +94,12 @@ const ChatCard = ({room}) => {
         if(currentUser && currentUser.rest && room){
           dispatch(joinRoomStart());
           dispatch(joinRoomSuccess(room));
-          dispatch(addMemberStart());
+          dispatch(addMemberAnonymousStart());
           const currentMembersRes = await fetch(`https://mindlink-backend.onrender.com/api/room/get-room/${room._id}`);
           const currentMembersData = await currentMembersRes.json();
           const currentMembers = currentMembersData.members;
-          // const anonymousName = generateRandomString();
-          const updatedMembers = [...currentMembers, {userId:currentUser.rest._id,username:currentUser.rest.username, avatar:currentUser.rest.avatar}];
+          const anonymousName = generateRandomString();
+          const updatedMembers = [...currentMembers, {userId:currentUser.rest._id,username:anonymousName, avatar:currentUser.rest.avatar}];
           const res2 = await fetch(`http://localhost:3000/api/room/update-room/${room._id}`,{
             method:'PATCH',
             headers:{
@@ -110,14 +110,14 @@ const ChatCard = ({room}) => {
           const member = await res2.json();
           if(res2.ok){
             dispatch(joinRoomSuccess(room));
-            dispatch(addMemberSuccess({member, id:member.room._id, roomTitle:room.roomTitle}));
+            dispatch(addMemberAnonymousSuccess({member, id:member.room._id, roomTitle:room.roomTitle}));
             toast.success(`you joined as "${anonymousName}"`);
             navigate('/chatroom');
           }
           else{
             toast.error(member.message);
             dispatch(joinRoomFailure(member.message));
-            dispatch(addMemberFailure(member.message));
+            dispatch(addMemberAnonymousFailure(member.message));
             console.log(member.message);
             return;
           }
@@ -126,7 +126,7 @@ const ChatCard = ({room}) => {
         else{
           toast.error('Login required to join the room');
           dispatch(joinRoomFailure(room.error));
-          dispatch(addMemberFailure(room.error));
+          dispatch(addMemberAnonymousFailure(room.error));
           return;
         }
     } catch (error) {
