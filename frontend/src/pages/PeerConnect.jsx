@@ -15,7 +15,7 @@ const PeerConnect = () => {
   useEffect(() => {
     const getRooms = async() => {
       try {
-        const res = await fetch('http://localhost:3000/api/room/get-rooms', {method:'GET'});
+        const res = await fetch('https://mindlink-backend.onrender.com/api/room/get-rooms', {method:'GET'});
         const data = await res.json();
         if(res.ok){
           setRooms(data);
@@ -32,7 +32,7 @@ const PeerConnect = () => {
     e.preventDefault();
     try {
       dispatch(createRoomStart());
-      const res = await fetch('http://localhost:3000/api/room/create-room',{
+      const res = await fetch('https://mindlink-backend.onrender.com/api/room/create-room',{
         method:'POST',
         headers:{
           'Content-type':'application/json'

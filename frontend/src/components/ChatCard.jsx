@@ -17,10 +17,10 @@ const ChatCard = ({room}) => {
   const handleDelete = async() => {
     try {
       dispatch(deleteRoomStart());
-      const res = await fetch(`http://localhost:3000/api/room/delete-room/${room._id}`,{
+      const res = await fetch(`https://mindlink-backend.onrender.com/api/room/delete-room/${room._id}`,{
         method:'DELETE'
       });
-      await fetch(`http://localhost:3000/api/chat/deletemessage/${room._id}`,{method:'DELETE'});
+      await fetch(`https://mindlink-backend.onrender.com/api/chat/deletemessage/${room._id}`,{method:'DELETE'});
       const data = await res.json();
       if(res.ok){
         toast.success(data.message);
@@ -43,13 +43,13 @@ const ChatCard = ({room}) => {
           dispatch(joinRoomStart());
           dispatch(joinRoomSuccess(room));
           dispatch(addMemberStart());
-          const currentMembersRes = await fetch(`http://localhost:3000/api/room/get-room/${room._id}`);
+          const currentMembersRes = await fetch(`https://mindlink-backend.onrender.com/api/room/get-room/${room._id}`);
           const currentMembersData = await currentMembersRes.json();
           const currentMembers = currentMembersData.members;
           
           const updatedMembers = [...currentMembers, {userId:currentUser.rest._id,username:currentUser.rest.username, avatar:currentUser.rest.avatar}];
 
-          const res2 = await fetch(`http://localhost:3000/api/room/update-room/${room._id}`,{
+          const res2 = await fetch(`https://mindlink-backend.onrender.com/api/room/update-room/${room._id}`,{
             method:'PATCH',
             headers:{
               'Content-Type':'application/json'
@@ -95,7 +95,7 @@ const ChatCard = ({room}) => {
           dispatch(joinRoomStart());
           dispatch(joinRoomSuccess(room));
           dispatch(addMemberStart());
-          const currentMembersRes = await fetch(`http://localhost:3000/api/room/get-room/${room._id}`);
+          const currentMembersRes = await fetch(`https://mindlink-backend.onrender.com/api/room/get-room/${room._id}`);
           const currentMembersData = await currentMembersRes.json();
           const currentMembers = currentMembersData.members;
           // const anonymousName = generateRandomString();

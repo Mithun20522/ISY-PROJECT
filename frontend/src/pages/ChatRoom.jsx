@@ -20,7 +20,7 @@ const ChatRoom = () => {
   const {member} = useSelector((state) => state.member);
   const [messageInfo, setMessageInfo] = useState([]);
   useEffect(() => {
-    const newSocket = io('http://localhost:3000', { transports: ['websocket'] });
+    const newSocket = io('https://mindlink-backend.onrender.com', { transports: ['websocket'] });
     setSocket(newSocket);
     return () => {
       newSocket.disconnect();
@@ -41,7 +41,7 @@ const ChatRoom = () => {
 
   useEffect(() => {
     const getMessages = async() => {
-      const res = await fetch(`http://localhost:3000/api/chat/getmessage/${member.id}`,{method:'GET'});
+      const res = await fetch(`https://mindlink-backend.onrender.com/api/chat/getmessage/${member.id}`,{method:'GET'});
       const data = await res.json();
       setMessageInfo(data);
     }
@@ -54,7 +54,7 @@ const ChatRoom = () => {
       socket.emit('chatMessage', { message: inputValue, sender:currentUser.rest.username, roomId:member.id });
       // setMessages((prevMessages) => [...prevMessages, { message: inputValue, sender:currentUser.rest.username }]);
       setInputValue('');
-      const res = await fetch('http://localhost:3000/api/chat/sendmessage',{
+      const res = await fetch('https://mindlink-backend.onrender.com/api/chat/sendmessage',{
       method:'POST',
       headers:{
         'Content-Type':'application/json'
@@ -74,7 +74,7 @@ const ChatRoom = () => {
   useEffect(() => {
     const getMembersInfoFromRoom = async() => {
       try {
-        const res = await fetch(`http://localhost:3000/api/room/get-room/${member.id}`);
+        const res = await fetch(`https://mindlink-backend.onrender.com/api/room/get-room/${member.id}`);
         const data = await res.json();
         if(res.ok){
           setMembersInfo(data.members);
@@ -95,11 +95,11 @@ const ChatRoom = () => {
         toast.error('please select a user first!');
         return;
       }
-      const currentMembersRes = await fetch(`http://localhost:3000/api/room/get-room/${memberToBeRemoved.roomId}`);
+      const currentMembersRes = await fetch(`https://mindlink-backend.onrender.com/api/room/get-room/${memberToBeRemoved.roomId}`);
       const currentMembersData = await currentMembersRes.json();
       const currentMembers = currentMembersData.members;
       const membersAfterDeletion = currentMembers.filter((curr) => curr.username !== memberToBeRemoved.memberName);
-      const res = await fetch(`http://localhost:3000/api/room/update-room/${memberToBeRemoved.roomId}`,{
+      const res = await fetch(`https://mindlink-backend.onrender.com/api/room/update-room/${memberToBeRemoved.roomId}`,{
         method:'PATCH',
         headers:{
           'Content-Type':'application/json'
@@ -125,7 +125,7 @@ const ChatRoom = () => {
   const handleChatDelete = async(req, res) => {
     try {
       if(currentUser && currentUser.rest.isAdmin){
-        const res = await fetch(`http://localhost:3000/api/chat/deletemessage/${member.id}`,{method:'DELETE',
+        const res = await fetch(`https://mindlink-backend.onrender.com/api/chat/deletemessage/${member.id}`,{method:'DELETE',
         headers:{
           'Content-Type':'application/json'
         }});

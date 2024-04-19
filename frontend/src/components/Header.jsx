@@ -13,7 +13,7 @@ const Header = () => {
   const {currentUser} = useSelector((state) => state.user);
   const handleSubmit = async() => {
     try {
-      const res = await fetch('http://localhost:3000/api/auth/signout',{
+      const res = await fetch('https://mindlink-backend.onrender.com/api/auth/signout',{
         method:'POST'
       });
       const data = await res.json();
