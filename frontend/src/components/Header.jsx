@@ -37,10 +37,10 @@ const Header = () => {
 
   return (
     <header className='p-7 flex items-center justify-between bg-slate-400 shadow-md border-b-2 border-black'>
-        <div className='flex justify-center items-center gap-2 cursor-pointer'>
+        <Link to={'/'} className='flex justify-center items-center gap-2 cursor-pointer'>
         <img src={logo} alt="logo" className='w-14 rounded-full bg-transparent h-14' />
         <h1 className='text-xl font-bold text-white'>mind<span className='text-red-500 text-3xl'>Link</span></h1>
-        </div>
+        </Link>
         <AiOutlineMenu className='sm:hidden' onClick={() => setClicked(!clicked)}/>
         <ul className='hidden sm:flex gap-5 items-center mx-24'>
                 <Link className='hover:scale-75 transition-all duration-50 ease-out text-xl font-semibold text-slate-50' to={'/'}><li>Home</li></Link>

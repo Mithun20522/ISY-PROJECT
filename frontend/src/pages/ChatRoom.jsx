@@ -20,6 +20,8 @@ const ChatRoom = () => {
   const [inputValue, setInputValue] = useState('');
   const {member} = useSelector((state) => state.member);
   const [messageInfo, setMessageInfo] = useState([]);
+  const [isScrolledToBottom, setIsScrolledToBottom] = useState(true);
+
   useEffect(() => {
     const newSocket = io('https://mindlink-backend.onrender.com', { transports: ['websocket'] });
     setSocket(newSocket);
@@ -31,6 +33,8 @@ const ChatRoom = () => {
   useEffect(() => {
     messageboxRef.current.scrollTop = messageboxRef.current.scrollHeight;
   },[messageInfo])
+  
+  
 
   useEffect(() => {
     if (!socket) return;
