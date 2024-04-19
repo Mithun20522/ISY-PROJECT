@@ -30,12 +30,14 @@ const ChatRoom = () => {
 
 
   useEffect(() => {
-    membersInfo && membersInfo.some((data) => {
-      if(data.userId === currentUser.rest._id){
-        setCurrUser(data.username);
+    if (currentUser && membersInfo.length > 0) {
+      const currentUserMember = membersInfo.find(member => member.userId === currentUser.rest._id);
+      if (currentUserMember) {
+        setCurrUser(currentUserMember.username);
       }
-    })
-  },[currUser, membersInfo])
+    }
+  }, [currentUser, membersInfo]);
+  
 
 
   useEffect(() => {
