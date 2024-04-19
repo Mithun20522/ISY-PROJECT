@@ -51,7 +51,7 @@ const handleChange = (e) => {
 }
   // console.log(loading);
   return (
-    <div className="flex sm:justify-between justify-center w-full min-h-screen ">
+    <div className="flex sm:justify-between justify-center w-full min-h-screen">
       <img
         src={img1}
         alt="image"

@@ -27,7 +27,7 @@ const App = () => {
       {currentUser && currentUser.rest && <Route path='/chatroom' element={<ChatRoom/>} />}
       <Route path='*' element={<PageNotFound/>} />
     </Routes>
-    <Footer/>
+    {/* <Footer/> */}
     <Toaster/>
     </>
   )

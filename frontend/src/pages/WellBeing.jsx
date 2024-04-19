@@ -19,7 +19,7 @@ const WellBeing = () => {
         Take the Next Step
         </h1>
         <p className="">
-        If you feel that you need professional help to address your mental health concerns, don't hesitate to reach out. Take the next step towards better mental health by scheduling a consultation with one of our trusted psychiatrists. Your well-being is our priority. <Link to={'https://iiitd.ac.in/wbc/'} className=' hover:text-blue-500'><FiExternalLink className='absolute right-[26%] bottom-7 text-2xl ml-5'/></Link>
+        If you feel that you need professional help to address your mental health concerns, don't hesitate to reach out. Take the next step towards better mental health by scheduling a consultation with one of our trusted psychiatrists. Your well-being is our priority. <Link to={'https://iiitd.ac.in/wbc/'} target='_blank' className=' hover:text-blue-500'><FiExternalLink className='absolute right-[26%] bottom-7 text-2xl ml-5'/></Link>
         </p>
       </div>
     </section>
