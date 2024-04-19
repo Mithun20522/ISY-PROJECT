@@ -31,7 +31,7 @@ const ChatRoom = () => {
     if (!socket) return;
 
     socket.on('chatMessage', ({ message, sender,roomId }) => {
-      setMessages((prevMessages) => [...prevMessages, { message, sender, roomId}]);
+      // setMessages((prevMessages) => [...prevMessages, { message, sender, roomId}]);
     });
 
     return () => {
@@ -41,9 +41,8 @@ const ChatRoom = () => {
 
   useEffect(() => {
     const getMessages = async() => {
-      const res = await fetch(`http://localhost:3000/api/chat/getmessages`,{method:'GET'});
+      const res = await fetch(`http://localhost:3000/api/chat/getmessage/${member.id}`,{method:'GET'});
       const data = await res.json();
-      // console.log(data)
       setMessageInfo(data);
     }
     getMessages();
@@ -52,7 +51,7 @@ const ChatRoom = () => {
   const sendMessage = async() => {
     try {
       if (!socket || !inputValue.trim()) return;
-      socket.emit('chatMessage', { message: inputValue, sender:currentUser.rest.username, roomId:member.roomId });
+      socket.emit('chatMessage', { message: inputValue, sender:currentUser.rest.username, roomId:member.id });
       // setMessages((prevMessages) => [...prevMessages, { message: inputValue, sender:currentUser.rest.username }]);
       setInputValue('');
       const res = await fetch('http://localhost:3000/api/chat/sendmessage',{
@@ -60,7 +59,7 @@ const ChatRoom = () => {
       headers:{
         'Content-Type':'application/json'
       },
-      body:JSON.stringify({ message: inputValue, sender:currentUser.rest.username, roomId:member.roomId })
+      body:JSON.stringify({ message: inputValue, sender:currentUser.rest.username, roomId:member.id })
       });
       const data = await res.json();
       if(res.ok){
@@ -157,7 +156,7 @@ const ChatRoom = () => {
                 <div className="h-[55vh] rounded-lg bg-slate-50 overflow-scroll space-y-1 relative px-3">
                   <div className="flex flex-col">
                   {
-                    messageInfo.map((data) => (
+                    messageInfo.length > 0 ? messageInfo.map((data) => (
                       <div key={data._id} className={`max-w-fit p-2 incoming_message ${data.sender === currentUser.rest.username ? 'ml-auto' : 'mr-auto'}`}>
                     <div className="w-fit flex gap-1 items-center font-medium p-1 ">
                         <img src={currentUser.rest.avatar} alt="member" className="w-6 h-6" />
@@ -168,7 +167,9 @@ const ChatRoom = () => {
                     </p>
                       <span className="text-gray-400 text-xs">{moment(data.createdAt).fromNow()}</span>
                     </div>
-                    ))
+                    )) : (
+                      <h1 className="text-center mt-40 text-4xl text-slate-400 fonr-thin">No conversation yet</h1>
+                    )
                   }
                   </div>
                 </div>
