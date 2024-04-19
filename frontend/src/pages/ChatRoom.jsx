@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { IoMdSend } from "react-icons/io";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {AiOutlineClose} from 'react-icons/ai'
 import toast from "react-hot-toast";
 import { RiAdminFill } from "react-icons/ri";
 import { io } from 'socket.io-client';
 import moment from 'moment';
 import { MdOutlineDeleteSweep } from "react-icons/md";
+import { BiExit } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
+import { joinRoomFailure } from "../redux/room/roomSlice";
 
 const ChatRoom = () => {
   const {currentRoom} = useSelector((state) => state.room);
@@ -21,10 +24,13 @@ const ChatRoom = () => {
   const {member} = useSelector((state) => state.member);
   const [messageInfo, setMessageInfo] = useState([]);
   const [isScrolledToBottom, setIsScrolledToBottom] = useState(true);
-
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { members } = member.member.room;
   let currUser = currentUser.rest.username;
 
-  const val = member && member.members.some((data) => {
+  // console.log(members);
+  const val = members && members.some((data) => {
     if(data.userId === currentUser.rest._id){
       currUser = data.username;
       return;
@@ -106,6 +112,34 @@ const ChatRoom = () => {
     }
     getMembersInfoFromRoom();
   },[membersInfo]);
+
+  const memberExist = async(userId, username) => {
+    try {
+      const currentMembersRes = await fetch(`https://mindlink-backend.onrender.com/api/room/get-room/${member.id}`);
+      const currentMembersData = await currentMembersRes.json();
+      const currentMembers = currentMembersData.members;
+      const membersAfterDeletion = currentMembers.filter((curr) => curr.userId !== userId);
+      const res = await fetch(`https://mindlink-backend.onrender.com/api/room/update-room/${member.id}`,{
+        method:'PATCH',
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body: JSON.stringify({members:membersAfterDeletion})
+      })
+      const data = await res.json();
+      if(res.ok){
+        toast.success('You left the room');
+        navigate('/peer-connect');
+      }
+      else{
+        toast.error(data.message);
+        console.log(data.message);
+        return;
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const handleMemberDelete = async() => {
     try {
@@ -197,7 +231,13 @@ const ChatRoom = () => {
         <div className="w-full">
           <div className="bg-slate-100 border flex items-center justify-between px-7">
           <h1 className="text-xl font-bold text-black p-2 text-center">{member.title}</h1>
-          <MdOutlineDeleteSweep onClick={handleChatDelete} className={`text-3xl cursor-pointer hover:bg-slate-300 hover:text-white rounded-full p-1 w-10 h-10`}/>
+          {
+            currentUser && currentUser.rest.isAdmin ? (
+              <MdOutlineDeleteSweep onClick={handleChatDelete} className={`text-3xl cursor-pointer hover:bg-slate-300 hover:text-white rounded-full p-1 w-10 h-10`}/>
+            ) : (
+              <BiExit onClick={() => memberExist(currentUser.rest._id, currentUser.rest.username)} className={`text-3xl cursor-pointer hover:bg-slate-300 hover:text-white rounded-full p-1 w-10 h-10`}/>
+            )
+          }
           </div>
             <div>
                 <div ref={messageboxRef} className="h-[55vh] rounded-lg bg-slate-50 overflow-y-auto space-y-1 relative px-3">
